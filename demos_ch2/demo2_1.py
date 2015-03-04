@@ -1,7 +1,9 @@
 """Becs-114.1311 Introduction to Bayesian Statistics
 Chapter 2, demo 1
 
-437 girls and 543 boys have been observed. Calculate and plot the posterior distribution of the proportion of girls $\theta$, using uniform prior on $\theta$.
+437 girls and 543 boys have been observed. Calculate and plot the posterior 
+distribution of the proportion of girls $\theta$, using uniform prior on 
+$\theta$.
 
 """
 
