@@ -37,7 +37,7 @@ my = np.mean(y)
 # Factorize the joint posterior p(mu,sigma2|y) to p(sigma2|y)p(mu|sigma2,y)
 # Sample from the joint posterior using this factorization
 
-# sample from p(sigma2|y) (sigma2  is a vector 1000 x 1)
+# sample from p(sigma2|y)
 sigma2 = sinvchi2.rvs(n-1, s2, size=1000)
 # sample from p(mu|sigma2,y) 
 mu = my + np.sqrt(sigma2/n)*np.random.randn(*sigma2.shape)
