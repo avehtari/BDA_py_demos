@@ -1,13 +1,12 @@
 """Becs-114.1311 Introduction to Bayesian Statistics
-Chapter 3, demo 2
+Chapter 3, demo 3
 
-Visualise joint density and marginal densities of posterior of normal 
-distribution with unknown mean and variance.
+Visualise marginal distribution of mu as a mixture of normals.
 
 """
 
 from __future__ import division
-import os
+import os, threading
 import numpy as np
 from scipy import stats
 import matplotlib.pyplot as plt
@@ -38,7 +37,7 @@ my = np.mean(y)
 # Sample from the joint posterior using this factorization
 
 # sample from p(sigma2|y)
-nsamp = 25
+nsamp = 1000
 sigma2 = sinvchi2.rvs(n-1, s2, size=nsamp)
 # sample from p(mu|sigma2,y) 
 mu = my + np.sqrt(sigma2/n)*np.random.randn(*sigma2.shape)
@@ -58,6 +57,11 @@ t2 = np.linspace(tl2[0], tl2[1], 1000)
 Z = stats.norm.pdf(t1, my, t2[:,np.newaxis]/np.sqrt(n))
 Z *= (sinvchi2.pdf(t2**2, n-1, s2)*2*t2)[:,np.newaxis]
 
+# compute the exact marginal density for mu
+# multiplication by 1./sqrt(s2/n) is due to the transformation of variable
+# z=(x-mean(y))/sqrt(s2/n), see BDA3 p. 21
+pm_mu = stats.t.pdf((t1 - my) / np.sqrt(s2/n), n-1) / np.sqrt(s2/n)
+
 # compute the exact marginal density for sigma
 # multiplication by 2*t2 is due to the transformation of variable
 # z=t2^2, see BDA3 p. 21
@@ -68,8 +72,8 @@ pm_sigma = sinvchi2.pdf(t2**2, n-1, s2)*2*t2
 # ====== Illustrate the sampling with interactive plot
 
 # create figure
-plotgrid = gridspec.GridSpec(1, 2, width_ratios=[3,2])
-fig = plt.figure(figsize=(12,8))
+plotgrid = gridspec.GridSpec(2, 2, width_ratios=[3,2], height_ratios=[3,2])
+fig = plt.figure(figsize=(14,12))
 
 # plot joint distribution
 ax0 = plt.subplot(plotgrid[0,0])
@@ -93,37 +97,32 @@ plt.ylim(tl2)
 plt.title('marginal of $\sigma$')
 plt.xticks(())
 
+# plot marginal of mu (empty first)
+ax10 = plt.subplot(plotgrid[1,0])
+plt.xlim(tl1)
+plt.title('marginal of $\mu$')
+plt.yticks(())
 
-# Function for interactively updating the figure
+# precalculate conditional pdfs for each sample
+condpdfs = stats.norm.pdf(t1, my, np.sqrt(sigma2/n)[:,np.newaxis])
+
+# function for interactively updating the figure
 def update_figure(event):
     
     if icontainer.stage == 0:
-        icontainer.stage += 1
+        icontainer.stage = 3
         # first sample of sigma2
-        line, = ax0.plot(tl1, [sigma[0], sigma[0]], 'k--', linewidth=1.5)
-        icontainer.legend_h.append(line)
+        line1, = ax0.plot(tl1, [sigma[0], sigma[0]], 'k--', linewidth=1.5)
+        icontainer.legend_h.append(line1)
         icontainer.legend_s.append('sample from the marginal of $\sigma$')
-        icontainer.prev_line1 = line
-        ax0.legend(icontainer.legend_h, icontainer.legend_s)
-        fig.canvas.draw()
-    
-    elif icontainer.stage == 1:
-        icontainer.stage += 1
+        icontainer.prev_line1 = line1
         # the conditional distribution of mu given sigma2
-        line, = ax0.plot(
-            t1,
-            sigma[0] + stats.norm.pdf(t1, my, np.sqrt(sigma2[0]/n))*100,
-            'g--',
-            linewidth=1.5
-        )
-        icontainer.legend_h.append(line)
+        line2, = ax0.plot(t1, sigma[0] + condpdfs[0]*100, 'g--', linewidth=1.5)
+        icontainer.legend_h.append(line2)
         icontainer.legend_s.append('conditional distribution of $\mu$')
-        icontainer.prev_line2 = line
-        ax0.legend(icontainer.legend_h, icontainer.legend_s)
-        fig.canvas.draw()
-    
-    elif icontainer.stage == 2:
-        icontainer.stage += 1
+        icontainer.prev_line2 = line2
+        conddist, = ax10.plot(t1, condpdfs[0], 'g--')
+        icontainer.conddists.append(conddist)
         # sample mu given sigma2
         scat = ax0.scatter(mu[0], sigma[0], 40, color='g')
         icontainer.legend_h.append(scat)
@@ -133,61 +132,107 @@ def update_figure(event):
         fig.canvas.draw()
     
     elif icontainer.stage == 3:
+        icontainer.stage += 1
+        # modify helper text
+        htext.set_text('press `q` to skip animation')
+        # start the timer
+        anim_thread.start()
+    
+    elif icontainer.stage == 4 and event.key == 'q':
+        # stop the timer
+        stop_anim.set()
+    
+    elif icontainer.stage == 5:
+        icontainer.stage += 1
+        # plot rest of the samples
+        ax0.scatter(mu[nanim:], sigma[nanim:], 8, color='g')
+        ax10.clear()
+        ax10.set_ylim([0,0.09])
+        ax10.set_xlim(tl1)
+        ax10.set_title('marginal of $\mu$')
+        ax10.plot(t1, np.mean(condpdfs, axis=0),
+                  color=[1,0.5,0], linewidth=5,
+                  label='average of sampled conditionals')
+        ax10.plot(t1, pm_mu, 'k--', linewidth=1.5, label='exact')
+        ax10.legend()
+        htext.set_text('')
+        fig.canvas.draw()
+
+# function for performing the figure animation in thread
+def animation():
+    for i1 in xrange(1, nanim-1):
         # remove previous lines
         ax0.lines.remove(icontainer.prev_line1)
         ax0.lines.remove(icontainer.prev_line2)
         # resize last scatter sample
         icontainer.prev_scat.get_sizes()[0] = 8
         # draw next sample
-        icontainer.i1 += 1
-        i1 = icontainer.i1
         # first sample of sigma2
-        icontainer.prev_line1, = ax0.plot(
-            tl1, [sigma[i1], sigma[i1]], 'k--', linewidth=1.5
-        )
+        icontainer.prev_line1, = \
+            ax0.plot(tl1, [sigma[i1], sigma[i1]], 'k--', linewidth=1.5)
         # the conditional distribution of mu given sigma2
         icontainer.prev_line2, = ax0.plot(
-            t1,
-            sigma[i1] + stats.norm.pdf(t1, my, np.sqrt(sigma2[i1]/n))*100,
-            'g--',
-            linewidth=1.5
+            t1, sigma[i1] + condpdfs[i1]*100,
+            'g--', linewidth=1.5
         )
+        conddist, = ax10.plot(t1, condpdfs[i1], 'g--')
+        icontainer.conddists.append(conddist)
         # sample mu given sigma2
         icontainer.prev_scat = ax0.scatter(mu[i1], sigma[i1], 40, color='g')
-        # check if last sample
-        if icontainer.i1 == nsamp-1:
-            icontainer.stage += 1
+        # update figure
         fig.canvas.draw()
-    
-    elif icontainer.stage == 4:
-        icontainer.stage += 1
-        # remove previous lines
-        ax0.lines.remove(icontainer.prev_line1)
-        ax0.lines.remove(icontainer.prev_line2)
-        # resize last scatter sample
-        icontainer.prev_scat.get_sizes()[0] = 8
-        # remove helper text
-        plt.suptitle('')
-        # remove extra legend entries
-        icontainer.legend_h.pop(2)
-        icontainer.legend_h.pop(1)
-        icontainer.legend_s.pop(2)
-        icontainer.legend_s.pop(1)
-        ax0.legend(icontainer.legend_h, icontainer.legend_s)
-        fig.canvas.draw()
+        # wait animation delay time or until animation is cancelled
+        stop_anim.wait(anim_delay)
+        if stop_anim.isSet():
+            # animation cancelled
+            break
+    # skip the rest if the figure does not exist anymore
+    if not plt.fignum_exists(fig.number):
+        return    
+    # advance stage
+    icontainer.stage += 1
+    # remove previous lines
+    ax0.lines.remove(icontainer.prev_line1)
+    ax0.lines.remove(icontainer.prev_line2)
+    # resize last scatter sample
+    icontainer.prev_scat.get_sizes()[0] = 8
+    # remove helper text
+    htext.set_text('press any key to continue')
+    # remove extra legend entries
+    icontainer.legend_h.pop(2)
+    icontainer.legend_h.pop(1)
+    icontainer.legend_s.pop(2)
+    icontainer.legend_s.pop(1)
+    ax0.legend(icontainer.legend_h, icontainer.legend_s)
+    # plot the rest of the samples
+    i1 += 1
+    if i1 < nanim:
+        ax0.scatter(mu[i1:nanim], sigma[i1:nanim], 8, color='g')
+        conddistlist = ax10.plot(t1, condpdfs[i1:nanim].T, 'g--')
+        icontainer.conddists.append(conddistlist)
+    fig.canvas.draw()
 
+# animation related variables
+stop_anim = threading.Event()
+anim_thread = threading.Thread(target=animation)
+anim_delay = 0.25
+nanim = 50
 
-# Store the information of the current stage of the figure
+# store the information of the current stage of the figure
 class icontainer(object):
     stage = 0
-    i1 = 0
     legend_h = [plt.Line2D([], [], color='blue'),]
     legend_s = ['exact contour plot',]
     prev_line1 = None
     prev_line2 = None
     prev_scat = None
+    conddists = []
 
-plt.suptitle('Press any key to continue', fontsize=20)
+# add helper text
+htext = fig.suptitle('press any key to continue', fontsize=20)
+# set figure to react to keypress events
 fig.canvas.mpl_connect('key_press_event', update_figure)
+# start blocking figure
 plt.show()
-
+# stop the animation (if it is active) as the figure is now closed
+stop_anim.set()

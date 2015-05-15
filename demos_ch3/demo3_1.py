@@ -104,10 +104,10 @@ plt.legend(
 
 # plot marginal of mu
 plt.subplot(plotgrid[1,0])
-# exact
-plt.plot(t1, pm_mu, 'b', label='exact')
 # empirical
-plt.plot(t1, pk_mu, 'r--', label='empirical')
+plt.plot(t1, pk_mu, color=[1,0.5,0], linewidth=2.5, label='empirical')
+# exact
+plt.plot(t1, pm_mu, 'k--', linewidth=1.5, label='exact')
 # decorate
 plt.xlim(tl1)
 plt.title('marginal of $\mu$')
@@ -116,10 +116,10 @@ plt.legend()
 
 # plot marginal of sigma
 plt.subplot(plotgrid[0,1])
-# exact
-plt.plot(pm_sigma, t2, 'b', label='exact')
 # empirical
-plt.plot(pk_sigma, t2, 'r--', label='empirical')
+plt.plot(pk_sigma, t2, color=[1,0.5,0], linewidth=2.5, label='empirical')
+# exact
+plt.plot(pm_sigma, t2, 'k--', linewidth=1.5, label='exact')
 # decorate
 plt.ylim(tl2)
 plt.title('marginal of $\sigma$')
