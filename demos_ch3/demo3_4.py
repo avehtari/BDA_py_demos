@@ -1,5 +1,5 @@
 """Becs-114.1311 Introduction to Bayesian Statistics
-Chapter 3, demo 3
+Chapter 3, demo 4
 
 Visualise sampling from the posterior predictive distribution.
 

@@ -1,8 +1,7 @@
 """Becs-114.1311 Introduction to Bayesian Statistics
 Chapter 3, demo 2
 
-Visualise joint density and marginal densities of posterior of normal 
-distribution with unknown mean and variance.
+Visualise factored sampling and corresponding marginal and conditional density.
 
 """
 
