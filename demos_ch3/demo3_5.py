@@ -6,11 +6,9 @@ Demonstrate normal model for the Newcomb's data (BDA3 p. 66).
 """
 
 from __future__ import division
-import os
 import numpy as np
 from scipy import stats
 import matplotlib.pyplot as plt
-import matplotlib.gridspec as gridspec
 
 
 # data
