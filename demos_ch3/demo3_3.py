@@ -122,7 +122,6 @@ def update_figure(event):
         icontainer.legend_s.append('conditional distribution of $\mu$')
         icontainer.prev_line2 = line2
         conddist, = ax10.plot(t1, condpdfs[0], 'g--')
-        icontainer.conddists.append(conddist)
         # sample mu given sigma2
         scat = ax0.scatter(mu[0], sigma[0], 40, color='g')
         icontainer.legend_h.append(scat)
@@ -139,7 +138,7 @@ def update_figure(event):
         anim_thread.start()
     
     elif icontainer.stage == 4 and event.key == 'q':
-        # stop the timer
+        # stop the animation
         stop_anim.set()
     
     elif icontainer.stage == 5:
@@ -160,7 +159,7 @@ def update_figure(event):
 
 # function for performing the figure animation in thread
 def animation():
-    for i1 in xrange(1, nanim-1):
+    for i1 in xrange(1, nanim):
         # remove previous lines
         ax0.lines.remove(icontainer.prev_line1)
         ax0.lines.remove(icontainer.prev_line2)
@@ -176,7 +175,6 @@ def animation():
             'g--', linewidth=1.5
         )
         conddist, = ax10.plot(t1, condpdfs[i1], 'g--')
-        icontainer.conddists.append(conddist)
         # sample mu given sigma2
         icontainer.prev_scat = ax0.scatter(mu[i1], sigma[i1], 40, color='g')
         # update figure
@@ -209,7 +207,6 @@ def animation():
     if i1 < nanim:
         ax0.scatter(mu[i1:nanim], sigma[i1:nanim], 8, color='g')
         conddistlist = ax10.plot(t1, condpdfs[i1:nanim].T, 'g--')
-        icontainer.conddists.append(conddistlist)
     fig.canvas.draw()
 
 # animation related variables
@@ -226,7 +223,6 @@ class icontainer(object):
     prev_line1 = None
     prev_line2 = None
     prev_scat = None
-    conddists = []
 
 # add helper text
 htext = fig.suptitle('press any key to continue', fontsize=20)
