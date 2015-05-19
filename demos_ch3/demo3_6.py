@@ -40,8 +40,8 @@ p = np.prod(ilogit_abx**y * (1 - ilogit_abx)**(n - y), axis=2)
 p = np.empty((len(B),len(A))) # allocate space
 for i in range(len(A)):
     for j in range(len(B)):
-        logit_abx_ij = (1 / (np.exp(-(A[i] + B[j] * x)) + 1))
-        p[j,i] = np.prod(logit_abx_ij**y * logit_abx_ij**(n - y))
+        ilogit_abx_ij = (1 / (np.exp(-(A[i] + B[j] * x)) + 1))
+        p[j,i] = np.prod(ilogit_abx_ij**y * ilogit_abx_ij**(n - y))
 '''
 
 # sample from the grid
