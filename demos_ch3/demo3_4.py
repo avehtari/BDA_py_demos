@@ -64,7 +64,6 @@ Z = stats.norm.pdf(t1, my, t2[:,np.newaxis]/np.sqrt(n))
 Z *= (sinvchi2.pdf(t2**2, n-1, s2)*2*t2)[:,np.newaxis]
 
 # compute the exact predictive density
-
 # multiplication by 1./sqrt(s2/n) is due to the transformation of variable
 # see BDA3 p. 21
 p_new = stats.t.pdf((xynew-my)/np.sqrt(s2*(1+1/n)), n-1) / np.sqrt(s2*(1+1/n))
@@ -136,7 +135,7 @@ def update_figure(event):
         axes[1].legend(
             (icontainer.ax1_hs, line),
             ('samples from the predictive distribution',
-             'Exact predictive distribution')
+             'exact predictive distribution')
         )
         fig.canvas.draw()
         
@@ -157,7 +156,7 @@ def animation():
         # show next sample
         icontainer.ax0_hs = axes[0].scatter(mu[i1], sigma[i1], 40, 'r')
         icontainer.ax1_hs = axes[1].scatter(
-            ynew[i1], (0.02 + 0.015*np.random.rand())*np.max(ynewdists), 40, 'r'
+            ynew[i1], (0.02 + 0.02*np.random.rand())*np.max(ynewdists), 40, 'r'
         )
         icontainer.prev_line, = axes[1].plot(
             xynew, ynewdists[i1], 'b', linewidth=1.5
