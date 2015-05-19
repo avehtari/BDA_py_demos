@@ -37,7 +37,7 @@ my = np.mean(y)
 # Sample from the joint posterior using this factorization
 
 # sample from p(sigma2|y)
-nsamp = 25
+nsamp = 1000
 sigma2 = sinvchi2.rvs(n-1, s2, size=nsamp)
 # sample from p(mu|sigma2,y) 
 mu = my + np.sqrt(sigma2/n)*np.random.randn(*sigma2.shape)
@@ -154,7 +154,7 @@ def update_figure(event):
         # sample mu given sigma2
         icontainer.prev_scat = ax0.scatter(mu[i1], sigma[i1], 40, color='g')
         # check if last sample
-        if icontainer.i1 == nsamp-1:
+        if icontainer.i1 == icontainer.ndraw-1:
             icontainer.stage += 1
         fig.canvas.draw()
     
@@ -173,6 +173,10 @@ def update_figure(event):
         icontainer.legend_s.pop(2)
         icontainer.legend_s.pop(1)
         ax0.legend(icontainer.legend_h, icontainer.legend_s)
+        # plot remaining samples
+        icontainer.i1 += 1
+        i1 = icontainer.i1
+        ax0.scatter(mu[i1:], sigma[i1:], 8, color='g')
         fig.canvas.draw()
 
 
@@ -185,6 +189,7 @@ class icontainer(object):
     prev_line1 = None
     prev_line2 = None
     prev_scat = None
+    ndraw = 6
 
 plt.suptitle('Press any key to continue', fontsize=20)
 fig.canvas.mpl_connect('key_press_event', update_figure)
