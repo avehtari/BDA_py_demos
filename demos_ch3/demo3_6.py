@@ -26,29 +26,23 @@ x = np.array([-0.86, -0.30, -0.05, 0.73])
 n = np.array([5, 5, 5, 5])
 y = np.array([0, 1, 3, 5])
 
-
 # compute the posterior density in grid
 #  - usually should be computed in logarithms!
 #  - with alternative prior, check that range and spacing of A and B
 #    are sensible
 A = np.linspace(-4, 8, 50)
 B = np.linspace(-10, 40, 50)
-# ---- for all combinations of A_i, B_j, i=1,...,200, j=1,...,200
-#~ p = np.empty((len(B),len(A))) # allocate space
-#~ for i in range(len(A)):
-#~     a = A[i]
-#~     for j in range(len(B)):
-#~         b = B[j]
-#~         p[j,i] = np.prod(
-#~             (1 / (np.exp(-(a + b * x)) + 1)) ** y
-#~             * (1 - 1 / (np.exp(-(a + b * x)) + 1)) ** (n - y)
-#~         )
-# ---- same in vectorised form
-p = np.prod(
-    (1 / (np.exp(-(A[:,None] + B[:,None,None] * x)) + 1)) ** y
-    * (1 - 1 / (np.exp(-(A[:,None] + B[:,None,None] * x)) + 1)) ** (n - y),
-    axis=2
-)
+ilogit_abx = 1 / (np.exp(-(A[:,None] + B[:,None,None] * x)) + 1)
+p = np.prod(ilogit_abx**y * (1 - ilogit_abx)**(n - y), axis=2)
+
+# alternative "bad" way of calcuting the above two lines in a for loop
+'''
+p = np.empty((len(B),len(A))) # allocate space
+for i in range(len(A)):
+    for j in range(len(B)):
+        logit_abx_ij = (1 / (np.exp(-(A[i] + B[j] * x)) + 1))
+        p[j,i] = np.prod(logit_abx_ij**y * logit_abx_ij**(n - y))
+'''
 
 # sample from the grid
 nsamp = 1000
