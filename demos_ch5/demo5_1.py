@@ -11,6 +11,10 @@ from scipy.stats import beta
 from scipy.special import gammaln
 import matplotlib.pyplot as plt
 
+# edit default plot settings
+import matplotlib
+matplotlib.rc('font', size=14)
+
 # rat data (BDA3, p. 102)
 y = np.array([
     0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 1, 1, 1, 1, 1, 2, 2, 2, 
@@ -75,6 +79,7 @@ lp = (
 lp -= lp.max()
 p = np.exp(lp)
 
+
 # plot the marginal posterior
 fig = plt.figure()
 plt.imshow(p, origin='lower', aspect='auto', extent=(A[0], A[-1], B[0], B[-1]))
@@ -94,6 +99,7 @@ samp_B = B[samp_indices[0]]
 # add random jitter, see BDA3 p. 76
 samp_A += (np.random.rand(nsamp) - 0.5) * (A[1]-A[0])
 samp_B += (np.random.rand(nsamp) - 0.5) * (B[1]-B[0])
+
 
 # Plot samples from the distribution of distributions Beta(alpha,beta),
 # that is, plot Beta(alpha,beta) using posterior samples of alpha and beta
@@ -150,9 +156,6 @@ plt.yticks(())
 plt.xlabel('$\\theta$', fontsize=20)
 plt.title('hierarchical model')
 
+
 plt.show()
-
-
-
-
 
