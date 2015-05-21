@@ -1,5 +1,5 @@
 """Becs-114.1311 Introduction to Bayesian Statistics
-Chapter 4, demo 1
+Chapter 5, demo 1
 
 Hierarchical model for Rats experiment (BDA3, p. 102).
 
