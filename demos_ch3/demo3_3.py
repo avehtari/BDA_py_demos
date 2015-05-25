@@ -12,17 +12,12 @@ from scipy import stats
 import matplotlib.pyplot as plt
 import matplotlib.gridspec as gridspec
 
-# Add utilities directory to sys.path
-util_path = ''  # Provide custom path to utilities ...
-if not util_path:
-    # ... or search it from the parent directory
-    cur_path = os.path.dirname(os.path.abspath(__file__))
-    parent_path = os.path.abspath(os.path.join(cur_path, os.pardir))
-    util_path = os.path.join(parent_path, 'utilities')
+# import from utilities
+import os
+util_path = '../utilities_and_data'  # provide path to utilities
+util_path = os.path.abspath(util_path)
 if util_path not in os.sys.path and os.path.exists(util_path):
     os.sys.path.insert(0, util_path)
-
-# Import from utilities
 import sinvchi2
 
 
