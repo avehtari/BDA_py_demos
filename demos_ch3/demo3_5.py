@@ -12,7 +12,8 @@ import matplotlib.pyplot as plt
 
 
 # data
-y = np.loadtxt('light.txt')
+data_path = '../utilities_and_data/light.txt'
+y = np.loadtxt(data_path)
 # sufficient statistics
 n = len(y)
 s2 = np.var(y, ddof=1)  # Here ddof=1 is used to get the sample estimate.

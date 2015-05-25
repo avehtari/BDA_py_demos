@@ -25,7 +25,8 @@ M = len(y)
 
 # load the pre-computed results for the hierarchical model
 # replace this with your own code in Ex 5.1*
-hres = scipy.io.loadmat('demo5_2.mat')
+hres_path = '../utilities_and_data/demo5_2.mat'
+hres = scipy.io.loadmat(hres_path)
 ''' Content information of the precalculated results:
 >>> scipy.io.whosmat('demo5_2.mat')
 [('pxm', (8, 500),  'double'),
