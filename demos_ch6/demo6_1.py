@@ -35,7 +35,7 @@ for i in range(10):
     a.hist(replicates[order[i]] if order[i] < 9 else y, np.arange(-45,55,5))
     a.set_yticks(())
 axes[0,0].set_xlim([-48,58])
-fig.suptitle('Light speed example: Observed data + Replicated datasets\n'
+fig.suptitle('Light speed example: Observed data + Replicated datasets.\n'
              'Can you spot which one is the observed data?', fontsize=18)
 
 """
@@ -62,6 +62,7 @@ plt.plot(x, pdf_min,
 plt.yticks(())
 plt.axvline(y.min(), color='k', linestyle='--',
             label='minimum of the true data set')
+plt.ylim([0,0.11])
 plt.legend()
 
 plt.show()
