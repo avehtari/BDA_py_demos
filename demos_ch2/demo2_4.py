@@ -13,6 +13,12 @@ from scipy.stats import beta
 import matplotlib.pyplot as plt
 
 
+# Edit default plot settings (colours from colorbrewer2.org)
+plt.rc('font', size=14)
+plt.rc('lines', color='#377eb8', linewidth=2)
+plt.rc('axes', color_cycle=('#377eb8','#e41a1c','#4daf4a',
+                            '#984ea3','#ff7f00','#ffff33'))
+
 # Data (437,543)
 a = 437
 b = 543
@@ -53,12 +59,15 @@ fig, axes = plt.subplots(nrows=3, ncols=1, sharex=True, figsize=(8, 12))
 # Posterior with uniform prior Beta(1,1)
 axes[0].plot(x, beta.pdf(x, a+1, b+1))
 axes[0].set_title('Poster with uniform prior')
+axes[0].set_yticks(())
 # Non-conjugate prior
 axes[1].plot(x, pp)
 axes[1].set_title('Non-conjugate prior')
+axes[1].set_yticks(())
 # Posterior with non-conjugate prior
 axes[2].plot(x, po)
 axes[2].set_title('Posterior with non-conjugate prior')
+axes[2].set_yticks(())
 # Set custom limits for x-axis
 axes[0].set_xlim((0.35, 0.6))
 fig.subplots_adjust(hspace=0.2)
@@ -66,18 +75,19 @@ fig.subplots_adjust(hspace=0.2)
 # Plot samples
 fig = plt.figure()
 # Plot cumulative posterior
-plt.plot(x, pc, 'r')
+plt.plot(x, pc, color='#e41a1c')
 # Calculate histograms and scale them into the same figure
 hist_r = np.histogram(r, bins=30)
 hist_rr = np.histogram(rr, bins=30)
 plt.barh(hist_r[1][:-1], hist_r[0]*0.02/hist_r[0].max(),
-        height=hist_r[1][1]-hist_r[1][0], left=0.35, color='g')
+        height=hist_r[1][1]-hist_r[1][0], left=0.35, color='#4daf4a')
 plt.bar(hist_rr[1][:-1], hist_rr[0]*0.2/hist_rr[0].max(),
-        width=hist_rr[1][1]-hist_rr[1][0], color='b')
+        width=hist_rr[1][1]-hist_rr[1][0], color='#377eb8')
 plt.legend(('Cumulative posterior', 'Random uniform numbers',
             'Posterior samples'), loc='best')
-# Set custom limits for x-axis
+# Set limits
 plt.xlim((0.35, 0.55))
+plt.ylim((0,1))
 
 # Display the figure
 plt.show()
