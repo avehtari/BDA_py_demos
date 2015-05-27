@@ -1,4 +1,4 @@
-"""Becs-114.1311 Introduction to Bayesian Statistics
+"""Bayesian data analysis
 Chapter 2, demo 4
 
 Calculate the posterior distribution on a discrete grid of points by 

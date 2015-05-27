@@ -1,4 +1,4 @@
-"""Becs-114.1311 Introduction to Bayesian Statistics
+"""Bayesian data analysis
 Chapter 3, demo 5
 
 Demonstrate normal model for the Newcomb's data (BDA3 p. 66).
@@ -10,6 +10,12 @@ import numpy as np
 from scipy import stats
 import matplotlib.pyplot as plt
 
+
+# Edit default plot settings (colours from colorbrewer2.org)
+plt.rc('font', size=14)
+plt.rc('lines', color='#377eb8', linewidth=2)
+plt.rc('axes', color_cycle=('#377eb8','#e41a1c','#4daf4a',
+                            '#984ea3','#ff7f00','#ffff33'))
 
 # data
 data_path = '../utilities_and_data/light.txt'
@@ -44,7 +50,7 @@ pm_mu_pos = (
 # ====== Plotting
 
 # create figure
-fig, axes = plt.subplots(2,1, sharex=True, figsize=(14,12))
+fig, axes = plt.subplots(2,1, sharex=True, figsize=(10,8))
 
 # plot histogram
 axes[0].hist(y, np.arange(-44,43,2))
@@ -54,11 +60,11 @@ axes[0].set_ylabel('count')
 plt.setp(axes[0].get_xticklabels(), visible=True)
 
 # plot posterior of mu
-axes[1].plot(t1, pm_mu, linewidth=1.5)
+axes[1].plot(t1, pm_mu)
 # plot posterior of mu in the filtered case
-axes[1].plot(t1, pm_mu_pos, linewidth=1.5)
+axes[1].plot(t1, pm_mu_pos)
 # Plot currently accepted true value
-axes[1].axvline(33, color='k', linestyle='--')
+axes[1].axvline(33, color='k', linestyle='--', linewidth=1.5)
 axes[1].legend(
     ('posterior of $\mu$',
      'posterior of $\mu$ given $y > 0$',

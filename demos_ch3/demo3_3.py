@@ -1,4 +1,4 @@
-"""Becs-114.1311 Introduction to Bayesian Statistics
+"""Bayesian data analysis
 Chapter 3, demo 3
 
 Visualise marginal distribution of mu as a mixture of normals.
@@ -20,6 +20,9 @@ if util_path not in os.sys.path and os.path.exists(util_path):
     os.sys.path.insert(0, util_path)
 import sinvchi2
 
+
+# Edit default plot settings (colours from colorbrewer2.org)
+plt.rc('font', size=14)
 
 # data
 y = np.array([93, 112, 122, 135, 122, 150, 118, 90, 124, 114])
@@ -145,10 +148,11 @@ def update_figure(event):
         ax10.set_xlim(tl1)
         ax10.set_title('marginal of $\mu$')
         ax10.plot(t1, np.mean(condpdfs, axis=0),
-                  color=[1,0.5,0], linewidth=5,
+                  color='#ff8f20', linewidth=4,
                   label='average of sampled conditionals')
         ax10.plot(t1, pm_mu, 'k--', linewidth=1.5, label='exact')
         ax10.legend()
+        ax10.set_yticks(())
         htext.set_text('')
         fig.canvas.draw()
 

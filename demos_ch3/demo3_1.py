@@ -1,4 +1,4 @@
-"""Becs-114.1311 Introduction to Bayesian Statistics
+"""Bayesian data analysis
 Chapter 3, demo 1
 
 Visualise joint density and marginal densities of posterior of normal 
@@ -20,6 +20,12 @@ if util_path not in os.sys.path and os.path.exists(util_path):
     os.sys.path.insert(0, util_path)
 import sinvchi2
 
+
+# Edit default plot settings (colours from colorbrewer2.org)
+plt.rc('font', size=14)
+plt.rc('lines', color='#377eb8')
+plt.rc('axes', color_cycle=('#377eb8','#e41a1c','#4daf4a',
+                            '#984ea3','#ff7f00','#ffff33'))
 
 # data
 y = np.array([93, 112, 122, 135, 122, 150, 118, 90, 124, 114])
@@ -75,7 +81,7 @@ pk_sigma = stats.gaussian_kde(sigma).evaluate(t2)
 
 # create figure
 plotgrid = gridspec.GridSpec(2, 2, width_ratios=[3,2], height_ratios=[3,2])
-plt.figure(figsize=(14,12))
+plt.figure(figsize=(12,12))
 
 # plot joint distribution
 plt.subplot(plotgrid[0,0])
@@ -99,7 +105,7 @@ plt.legend(
 # plot marginal of mu
 plt.subplot(plotgrid[1,0])
 # empirical
-plt.plot(t1, pk_mu, color=[1,0.5,0], linewidth=2.5, label='empirical')
+plt.plot(t1, pk_mu, color='#ff8f20', linewidth=2.5, label='empirical')
 # exact
 plt.plot(t1, pm_mu, 'k--', linewidth=1.5, label='exact')
 # decorate
@@ -111,7 +117,7 @@ plt.legend()
 # plot marginal of sigma
 plt.subplot(plotgrid[0,1])
 # empirical
-plt.plot(pk_sigma, t2, color=[1,0.5,0], linewidth=2.5, label='empirical')
+plt.plot(pk_sigma, t2, color='#ff8f20', linewidth=2.5, label='empirical')
 # exact
 plt.plot(pm_sigma, t2, 'k--', linewidth=1.5, label='exact')
 # decorate

@@ -1,4 +1,4 @@
-"""Becs-114.1311 Introduction to Bayesian Statistics
+"""Bayesian data analysis
 Chapter 3, demo 4
 
 Visualise sampling from the posterior predictive distribution.
@@ -19,6 +19,8 @@ if util_path not in os.sys.path and os.path.exists(util_path):
     os.sys.path.insert(0, util_path)
 import sinvchi2
 
+# Edit default plot settings (colours from colorbrewer2.org)
+plt.rc('font', size=14)
 
 # data
 y = np.array([93, 112, 122, 135, 122, 150, 118, 90, 124, 114])
@@ -84,7 +86,8 @@ axes[0].set_ylabel('$\sigma$', fontsize=20)
 axes[0].set_title('joint posterior')
 axes[0].legend(
     (plt.Line2D([], [], color='blue'), samps),
-    ('exact contour plot', 'samples')
+    ('exact contour plot', 'samples'),
+    loc='upper center'
 )
 # highlight the first sample
 ax0_hs = axes[0].scatter(mu[0], sigma[0], 40, 'r')
@@ -104,7 +107,8 @@ axes[1].set_yticks(())
 axes[1].legend(
     (line1, ax1_hs),
     ('pred.dist. given the posterior sample',
-    'sample from the predictive distribution')
+    'sample from the predictive distribution'),
+    loc='upper center'
 )
 
 # function for interactively updating the figure
@@ -130,7 +134,8 @@ def update_figure(event):
         axes[1].legend(
             (icontainer.ax1_hs, line),
             ('samples from the predictive distribution',
-             'exact predictive distribution')
+             'exact predictive distribution'),
+             loc='upper center'
         )
         fig.canvas.draw()
         
@@ -188,7 +193,8 @@ def animation():
     # update legend
     axes[1].legend(
         (icontainer.ax1_hs,),
-        ('samples from the predictive distribution',)
+        ('samples from the predictive distribution',),
+        loc='upper center'
     )
     fig.canvas.draw()
 

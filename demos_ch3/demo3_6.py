@@ -21,6 +21,12 @@ import numpy as np
 import matplotlib.pyplot as plt
 
 
+# Edit default plot settings (colours from colorbrewer2.org)
+plt.rc('font', size=14)
+plt.rc('lines', color='#377eb8', linewidth=2)
+plt.rc('axes', color_cycle=('#377eb8','#e41a1c','#4daf4a',
+                            '#984ea3','#ff7f00','#ffff33'))
+
 # data
 x = np.array([-0.86, -0.30, -0.05, 0.73])
 n = np.array([5, 5, 5, 5])
@@ -64,27 +70,31 @@ samp_ld50 = -samp_A[bpi]/samp_B[bpi]
 # ====== Plotting
 
 # plot posterior density
-fig = plt.figure(figsize=(10,14))
+fig = plt.figure(figsize=(10,12))
 plt.subplot(3,1,1)
 plt.imshow(p, origin='lower', aspect='auto', extent=(A[0], A[-1], B[0], B[-1]))
 plt.xlim([-2,8])
 plt.ylim([-2,40])
-plt.xlabel('$\\alpha$', fontsize=20)
-plt.ylabel('$\\beta$', fontsize=20)
+plt.xlabel(r'$\alpha$', fontsize=18)
+plt.ylabel(r'$\beta$', fontsize=18)
 
 # plot samples
 plt.subplot(3,1,2)
 plt.scatter(samp_A, samp_B, 10, linewidth=0)
 plt.xlim([-2,8])
 plt.ylim([-2,40])
-plt.xlabel('$\\alpha$', fontsize=20)
-plt.ylabel('$\\beta$', fontsize=20)
+plt.xlabel(r'$\alpha$', fontsize=18)
+plt.ylabel(r'$\beta$', fontsize=18)
 
 # plot histogram of LD50
 plt.subplot(3,1,3)
 plt.hist(samp_ld50, np.arange(-0.5, 0.51, 0.02))
 plt.xlim([-0.5, 0.5])
-plt.xlabel('LD50 = -$\\alpha/\\beta$', fontsize=16)
+plt.xlabel(r'LD50 = -$\alpha/\beta$')
 plt.yticks(())
+
+# Add super title
+plt.suptitle('Bioassay demo', fontsize=18)
+
 
 plt.show()

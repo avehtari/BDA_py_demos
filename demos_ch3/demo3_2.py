@@ -1,4 +1,4 @@
-"""Becs-114.1311 Introduction to Bayesian Statistics
+"""Bayesian data analysis
 Chapter 3, demo 2
 
 Visualise factored sampling and corresponding marginal and conditional density.
@@ -20,6 +20,9 @@ if util_path not in os.sys.path and os.path.exists(util_path):
     os.sys.path.insert(0, util_path)
 import sinvchi2
 
+
+# Edit default plot settings (colours from colorbrewer2.org)
+plt.rc('font', size=14)
 
 # data
 y = np.array([93, 112, 122, 135, 122, 150, 118, 90, 124, 114])
