@@ -1,4 +1,4 @@
-"""Becs-114.1311 Introduction to Bayesian Statistics
+"""Bayesian data analysis
 Chapter 3, demo 6
 
 Illustrate posterior inference for Bioassay data (BDA3 p. 74-).
