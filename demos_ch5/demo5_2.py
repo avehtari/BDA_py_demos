@@ -11,9 +11,9 @@ from scipy.stats import norm
 import scipy.io # For importing a matlab file
 import matplotlib.pyplot as plt
 
-# edit default plot settings
+# Edit default plot settings (colours from colorbrewer2.org)
 plt.rc('font', size=14)
-plt.rc('lines', color=(0.3,0.5,0.8), linewidth=2)
+plt.rc('lines', color='#377eb8', linewidth=2)
 plt.rc('axes', color_cycle=(plt.rcParams['lines.color'],)) # Disable color cycle
 
 # SAT-example data (BDA3 p. 120)
@@ -83,26 +83,26 @@ fig, axes = plt.subplots(3, 1, sharex=True, figsize=(8,10))
 
 axes[0].plot(t, tp)
 axes[0].set_yticks(())
-axes[0].set_title('marginal posterior density $p(\\tau|y)$')
-axes[0].set_ylabel('$p(\\tau|y)$', fontsize=20)
+axes[0].set_title(r'marginal posterior density $p(\tau|y)$')
+axes[0].set_ylabel(r'$p(\tau|y)$', fontsize=20)
 axes[0].set_xlim([0,35])
 
 lines = axes[1].plot(t, tm[1:].T, linewidth=1)
 line, = axes[1].plot(t, tm[0].T, 'r')
 axes[1].legend((line, lines[1]), ('school A', 'other schools'),
                loc='upper left')
-axes[1].set_title('conditional posterior means of effects '
-                  '$\operatorname{E}(\\theta_j|\\tau,y)$')
-axes[1].set_ylabel('$\operatorname{E}(\\theta_j|\\tau,y)$', fontsize=20)
+axes[1].set_title(r'conditional posterior means of effects '
+                  r'$\operatorname{E}(\theta_j|\tau,y)$')
+axes[1].set_ylabel(r'$\operatorname{E}(\theta_j|\tau,y)$', fontsize=20)
 
 lines = axes[2].plot(t, tsd[1:].T, linewidth=1)
 line, = axes[2].plot(t, tsd[0].T, 'r')
 axes[2].legend((line, lines[1]), ('school A', 'other schools'),
                loc='upper left')
-axes[2].set_title('standard deviations of effects '
-                  '$\operatorname{sd}(\\theta_j|\\tau,y)$')
-axes[2].set_ylabel('$\operatorname{sd}(\\theta_j|\\tau,y)$', fontsize=20)
-axes[2].set_xlabel('$\\tau$', fontsize=20)
+axes[2].set_title(r'standard deviations of effects '
+                  r'$\operatorname{sd}(\theta_j|\tau,y)$')
+axes[2].set_ylabel(r'$\operatorname{sd}(\theta_j|\tau,y)$', fontsize=20)
+axes[2].set_xlabel(r'$\tau$', fontsize=20)
 
 plt.show()
 

@@ -1,4 +1,4 @@
-"""Becs-114.1311 Introduction to Bayesian Statistics
+"""Bayesian data analysis
 Chapter 6, demo 1
 
 Posterior predictive checking demo
@@ -10,9 +10,11 @@ import numpy as np
 from scipy import stats
 import matplotlib.pyplot as plt
 
-# edit default plot settings
+# edit default plot settings (colours from colorbrewer2.org)
 plt.rc('font', size=14)
-plt.rc('lines', color=(0.3,0.5,0.8), linewidth=2)
+plt.rc('lines', color='#377eb8', linewidth=2)
+plt.rc('axes', color_cycle=('#377eb8','#e41a1c','#4daf4a',
+                            '#984ea3','#ff7f00','#ffff33'))
 
 # data
 data_path = '../utilities_and_data/light.txt'
@@ -63,7 +65,7 @@ plt.yticks(())
 plt.axvline(y.min(), color='k', linestyle='--',
             label='minimum of the true data set')
 plt.ylim([0,0.11])
-plt.legend()
+plt.legend(loc='upper center')
 
 plt.show()
 

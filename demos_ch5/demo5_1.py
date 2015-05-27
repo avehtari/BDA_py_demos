@@ -1,4 +1,4 @@
-"""Becs-114.1311 Introduction to Bayesian Statistics
+"""Bayesian data analysis
 Chapter 5, demo 1
 
 Hierarchical model for Rats experiment (BDA3, p. 102).
@@ -11,9 +11,9 @@ from scipy.stats import beta
 from scipy.special import gammaln
 import matplotlib.pyplot as plt
 
-# edit default plot settings
+# Edit default plot settings (colours from colorbrewer2.org)
 plt.rc('font', size=14)
-plt.rc('lines', color=(0.3,0.5,0.8), linewidth=2)
+plt.rc('lines', color='#377eb8', linewidth=2)
 plt.rc('axes', color_cycle=(plt.rcParams['lines.color'],)) # Disable color cycle
 
 # rat data (BDA3, p. 102)
@@ -45,17 +45,17 @@ lines = plt.plot(x, beta.pdf(x[:,None], y[:-1] + 1, n[:-1] - y[:-1] + 1),
 # highlight the last line
 line1, = plt.plot(x, beta.pdf(x, y[-1] + 1, n[-1] - y[-1] + 1), 'r')
 plt.legend((lines[0], line1),
-           ('Posterior of $\\theta_j$', 'Posterior of $\\theta_{71}$'))
+           (r'Posterior of $\theta_j$', r'Posterior of $\theta_{71}$'))
 plt.yticks(())
 plt.title('separate model')
 
 # pooled
 plt.subplot(2, 1, 2)
 plt.plot(x, beta.pdf(x, y.sum() + 1, n.sum() - y.sum() + 1),
-         linewidth=2, label=('Posterior of common $\\theta$'))
+         linewidth=2, label=(r'Posterior of common $\theta$'))
 plt.legend()
 plt.yticks(())
-plt.xlabel('$\\theta$', fontsize=20)
+plt.xlabel(r'$\theta$', fontsize=20)
 plt.title('pooled model')
 
 
@@ -83,8 +83,8 @@ p = np.exp(lp)
 # plot the marginal posterior
 fig = plt.figure()
 plt.imshow(p, origin='lower', aspect='auto', extent=(A[0], A[-1], B[0], B[-1]))
-plt.xlabel('$\\alpha$', fontsize=20)
-plt.ylabel('$\\beta$', fontsize=20)
+plt.xlabel(r'$\alpha$', fontsize=20)
+plt.ylabel(r'$\beta$', fontsize=20)
 plt.title('The marginal posterior of alpha and beta in hierarchical model')
 
 
@@ -107,8 +107,8 @@ fig = plt.figure(figsize=(8,10))
 plt.subplot(2, 1, 1)
 plt.plot(x, beta.pdf(x[:,None], samp_A[:20], samp_B[:20]), linewidth=1)
 plt.yticks(())
-plt.title('Posterior samples from the distribution of distributions '
-                  'Beta($\\alpha$,$\\beta$)')
+plt.title(r'Posterior samples from the distribution of distributions '
+                  r'Beta($\alpha$,$\beta$)')
 
 # The average of above distributions, is the predictive distribution for a new
 # theta, and also the prior distribution for theta_j.
@@ -116,9 +116,9 @@ plt.title('Posterior samples from the distribution of distributions '
 plt.subplot(2, 1, 2)
 plt.plot(x, np.mean(beta.pdf(x, samp_A[:,None], samp_B[:,None]), axis=0))
 plt.yticks(())
-plt.xlabel('$\\theta$', fontsize=20)
-plt.title('Predictive distribution for a new $\\theta$ '
-          'and prior for $\\theta_j$')
+plt.xlabel(r'$\theta$', fontsize=20)
+plt.title(r'Predictive distribution for a new $\theta$ '
+          r'and prior for $\theta_j$')
 
 
 # And finally compare separate model and hierarchical model
@@ -156,7 +156,7 @@ lines = plt.plot(
 lines[-1].set_linewidth(2)
 lines[-1].set_color('r')
 plt.yticks(())
-plt.xlabel('$\\theta$', fontsize=20)
+plt.xlabel(r'$\theta$', fontsize=20)
 plt.title('hierarchical model')
 
 
