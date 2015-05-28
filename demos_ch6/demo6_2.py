@@ -8,7 +8,6 @@ Binomial example - Testing sequential dependence example
 
 from __future__ import division
 import numpy as np
-from scipy import stats
 import matplotlib.pyplot as plt
 
 # edit default plot settings (colours from colorbrewer2.org)
