@@ -1,7 +1,19 @@
+"""Bayesian data analysis
+PyStan demo
+
+Demo for using Stan with Python interface PyStan.
+
+"""
+
 import numpy as np
 import pystan
 import matplotlib.pyplot as plt
 
+# edit default plot settings (colours from colorbrewer2.org)
+plt.rc('font', size=14)
+plt.rc('lines', color='#377eb8', linewidth=2)
+plt.rc('axes', color_cycle=('#377eb8','#e41a1c','#4daf4a',
+                            '#984ea3','#ff7f00','#ffff33'))
 
 # ====== Bernoulli model =======================================================
 bernoulli_code = """
@@ -134,19 +146,32 @@ fit = pystan.stan(model_code=linear_code, data=data)
 
 # Plot
 samples = fit.extract(permuted=True)
-plt.subplot(1,3,1)
-plt.plot(x, np.percentile(samples['mu'], 50, axis=0), 'r-')
-plt.plot(x, np.percentile(samples['mu'], [5, 95], axis=0).T, 'r--')
-plt.plot(x, y, 'b.')
+plt.figure(figsize=(8,10))
+plt.subplot(3,1,1)
+plt.plot(x,
+    np.percentile(samples['mu'], 50, axis=0),
+    color='#e41a1c',
+    linewidth=1
+)
+plt.plot(
+    x,
+    np.asarray(np.percentile(samples['mu'], [5, 95], axis=0)).T,
+    color='#e41a1c',
+    linestyle='--',
+    linewidth=1,
+)
+plt.scatter(x, y, 5, color='#377eb8')
 plt.xlabel('Year')
 plt.ylabel('Summer temperature at Kilpisjarvi')
-plt.subplot(1,3,2)
+plt.xlim((1952,2013))
+plt.subplot(3,1,2)
 plt.hist(samples['beta'], 50)
 plt.xlabel('beta')
 print 'Pr(beta > 0) = {}'.format(np.mean(samples['beta']>0))
-plt.subplot(1,3,3)
+plt.subplot(3,1,3)
 plt.hist(samples['sigma'], 50)
 plt.xlabel('sigma')
+plt.tight_layout()
 plt.show()
 
 
@@ -197,19 +222,32 @@ fit = pystan.stan(model_code=linear_code, data=data)
 
 # Plot
 samples = fit.extract(permuted=True)
-plt.subplot(1,3,1)
-plt.plot(x, np.percentile(samples['mu'], 50, axis=0), 'r-')
-plt.plot(x, np.percentile(samples['mu'], [5, 95], axis=0).T, 'r--')
-plt.plot(x, y, 'b.')
+plt.figure(figsize=(8,10))
+plt.subplot(3,1,1)
+plt.plot(x,
+    np.percentile(samples['mu'], 50, axis=0),
+    color='#e41a1c',
+    linewidth=1
+)
+plt.plot(
+    x,
+    np.asarray(np.percentile(samples['mu'], [5, 95], axis=0)).T,
+    color='#e41a1c',
+    linestyle='--',
+    linewidth=1,
+)
+plt.scatter(x, y, 5, color='#377eb8')
 plt.xlabel('Year')
 plt.ylabel('Summer temperature at Kilpisjarvi')
-plt.subplot(1,3,2)
+plt.xlim((1952,2013))
+plt.subplot(3,1,2)
 plt.hist(samples['beta'], 50)
 plt.xlabel('beta')
 print 'Pr(beta > 0) = {}'.format(np.mean(samples['beta']>0))
-plt.subplot(1,3,3)
+plt.subplot(3,1,3)
 plt.hist(samples['sigma'], 50)
 plt.xlabel('sigma')
+plt.tight_layout()
 plt.show()
 
 
@@ -259,19 +297,32 @@ fit = pystan.stan(model_code=linear_code, data=data)
 
 # Plot
 samples = fit.extract(permuted=True)
-plt.subplot(1,3,1)
-plt.plot(x, np.percentile(samples['mu'], 50, axis=0), 'r-')
-plt.plot(x, np.percentile(samples['mu'], [5, 95], axis=0).T, 'r--')
-plt.plot(x, y, 'b.')
+plt.figure(figsize=(8,10))
+plt.subplot(3,1,1)
+plt.plot(x,
+    np.percentile(samples['mu'], 50, axis=0),
+    color='#e41a1c',
+    linewidth=1
+)
+plt.plot(
+    x,
+    np.asarray(np.percentile(samples['mu'], [5, 95], axis=0)).T,
+    color='#e41a1c',
+    linestyle='--',
+    linewidth=1,
+)
+plt.scatter(x, y, 5, color='#377eb8')
 plt.xlabel('Year')
 plt.ylabel('Summer temperature at Kilpisjarvi')
-plt.subplot(1,3,2)
+plt.xlim((1952,2013))
+plt.subplot(3,1,2)
 plt.hist(samples['beta'], 50)
 plt.xlabel('beta')
 print 'Pr(beta > 0) = {}'.format(np.mean(samples['beta']>0))
-plt.subplot(1,3,3)
+plt.subplot(3,1,3)
 plt.hist(samples['sigma'], 50)
 plt.xlabel('sigma')
+plt.tight_layout()
 plt.show()
 
 
@@ -309,22 +360,35 @@ fit = pystan.stan(model_code=linear_code, data=data)
 
 # Plot
 samples = fit.extract(permuted=True)
-plt.subplot(2,2,1)
-plt.plot(x, np.percentile(samples['mu'], 50, axis=0), 'r-')
-plt.plot(x, np.percentile(samples['mu'], [5, 95], axis=0).T, 'r--')
-plt.plot(x, y, 'b.')
+plt.figure(figsize=(8,12))
+plt.subplot(4,1,1)
+plt.plot(x,
+    np.percentile(samples['mu'], 50, axis=0),
+    color='#e41a1c',
+    linewidth=1
+)
+plt.plot(
+    x,
+    np.asarray(np.percentile(samples['mu'], [5, 95], axis=0)).T,
+    color='#e41a1c',
+    linestyle='--',
+    linewidth=1,
+)
+plt.scatter(x, y, 5, color='#377eb8')
 plt.xlabel('Year')
 plt.ylabel('Summer temperature at Kilpisjarvi')
-plt.subplot(2,2,2)
+plt.xlim((1952,2013))
+plt.subplot(4,1,2)
 plt.hist(samples['beta'], 50)
 plt.xlabel('beta')
 print 'Pr(beta > 0) = {}'.format(np.mean(samples['beta']>0))
-plt.subplot(2,2,3)
+plt.subplot(4,1,3)
 plt.hist(samples['sigma'], 50)
 plt.xlabel('sigma')
-plt.subplot(2,2,4)
+plt.subplot(4,1,4)
 plt.hist(samples['nu'], 50)
 plt.xlabel('nu')
+plt.tight_layout()
 plt.show()
 
 
