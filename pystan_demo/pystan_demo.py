@@ -286,8 +286,8 @@ generated quantities {
 }
 """
 # Data for Stan
-d = np.loadtxt('kilpisjarvi-summer-temp.csv', dtype=np.double, delimiter=';',
-               skiprows=1)
+data_path = '../utilities_and_data/kilpisjarvi-summer-temp.csv'
+d = np.loadtxt(data_path, dtype=np.double, delimiter=';', skiprows=1)
 x = np.repeat(d[:,0], 4)
 y = d[:,1:5].ravel()
 N = len(x)
@@ -349,8 +349,8 @@ model {
 }
 """
 # Data for Stan
-d = np.loadtxt('kilpisjarvi-summer-temp.csv', dtype=np.double, delimiter=';',
-               skiprows=1)
+data_path = '../utilities_and_data/kilpisjarvi-summer-temp.csv'
+d = np.loadtxt(data_path, dtype=np.double, delimiter=';', skiprows=1)
 x = np.repeat(d[:,0], 4)
 y = d[:,1:5].ravel()
 N = len(x)
@@ -410,8 +410,8 @@ model {
 }
 """
 # Data for Stan
-d = np.loadtxt('kilpisjarvi-summer-temp.csv', dtype=np.double, delimiter=';',
-               skiprows=1)
+data_path = '../utilities_and_data/kilpisjarvi-summer-temp.csv'
+d = np.loadtxt(data_path, dtype=np.double, delimiter=';', skiprows=1)
 # Is there difference between different summer months?
 x = np.tile(np.arange(1,5), d.shape[0]) # summer months are numbered from 1 to 4
 y = d[:,1:5].ravel()
@@ -465,8 +465,8 @@ model {
 }
 """
 # Data for Stan
-d = np.loadtxt('kilpisjarvi-summer-temp.csv', dtype=np.double, delimiter=';',
-               skiprows=1)
+data_path = '../utilities_and_data/kilpisjarvi-summer-temp.csv'
+d = np.loadtxt(data_path, dtype=np.double, delimiter=';', skiprows=1)
 # Is there difference between different summer months?
 x = np.tile(np.arange(1,5), d.shape[0]) # summer months are numbered from 1 to 4
 y = d[:,1:5].ravel()
