@@ -28,7 +28,6 @@ q_func = stats.gaussian_kde(r, bw_method=0.48)
 q = q_func.evaluate(x)
 
 # importance sampling example
-fig, axes = plt.subplots(2, 1, sharex=True, figsize=(10,8))
 g = stats.norm.pdf(x)
 w = q/g
 r = np.random.randn(100)
@@ -36,12 +35,13 @@ r = r[np.abs(r) < 3] # remove samples out of the grid
 wr = q_func.evaluate(r)/stats.norm.pdf(r)
 
 # plot
+fig, axes = plt.subplots(2, 1, sharex=True, figsize=(10,8))
 axes[0].plot(x, q, label=r'$q(\theta|y)$')
 axes[0].plot(x, g, label=r'$g(\theta)$')
 axes[0].set_yticks(())
 axes[0].set_title('target and proposal distributions')
 axes[0].legend()
-axes[1].plot(x, w, label=r'q(\theta|y)/g(\theta)')
+axes[1].plot(x, w, label=r'$q(\theta|y)/g(\theta)$')
 axes[1].set_title('samples and importance weights')
 axes[1].vlines(r, 0, wr, color='#377eb8', alpha=0.4)
 axes[1].set_ylim((0,axes[1].get_ylim()[1]))
