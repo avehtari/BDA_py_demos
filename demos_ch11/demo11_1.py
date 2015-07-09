@@ -6,21 +6,12 @@ Gibbs sampling demonstration
 """
 
 from __future__ import division
-import os, threading
+import threading
 import numpy as np
 import scipy.io # For importing a matlab file
-from scipy import linalg
-from scipy import stats
+from scipy import linalg, stats
+import matplotlib as mpl
 import matplotlib.pyplot as plt
-from matplotlib.patches import Ellipse
-import matplotlib.lines as mlines
-
-#~ # import from utilities
-#~ import os
-#~ util_path = '../utilities_and_data'  # provide path to utilities
-#~ util_path = os.path.abspath(util_path)
-#~ if util_path not in os.sys.path and os.path.exists(util_path):
-    #~ os.sys.path.insert(0, util_path)
 
 # edit default plot settings (colours from colorbrewer2.org)
 plt.rc('font', size=14)
@@ -46,11 +37,12 @@ M = 2*1000
 # plots You can implement this also by saving only the final state of complete
 # iteration updating all parameters.
 
+# ====== Gibbs sampling here
+
 # Allocate memory for the samples
 tt = np.empty((M,2))
 tt[0] = [t1, t2]    # Save starting point
 
-# Gibbs sampling here
 # For demonstration load pre-computed values
 # Replace this with your algorithm!
 # tt is a M x 2 array, with M samples of both theta_1 and theta_2
@@ -76,7 +68,7 @@ Y2 = np.linspace(-4.5, 4.5, 150)
 # computed from the eigenvectors, but since marginals are same
 # we know that angle is 45 degrees.
 q = np.sort(np.sqrt(linalg.eigh(S, eigvals_only=True)) * 2.147)
-el = Ellipse(
+el = mpl.patches.Ellipse(
     xy = (y1,y2),
     width = 2 * q[1],
     height = 2 * q[0],
@@ -84,25 +76,26 @@ el = Ellipse(
     facecolor = 'none',
     edgecolor = '#e41a1c'
 )
-el_legend = mlines.Line2D([], [], color='#e41a1c', linewidth=1)
+el_legend = mpl.lines.Line2D([], [], color='#e41a1c', linewidth=1)
 fig = plt.figure(figsize=(10,8))
 ax = fig.add_subplot(111, aspect='equal')
 ax.add_artist(el)
-samp_legend, = ax.plot(tt[0,0], tt[0,1], 'o', markerfacecolor='none',
-                markeredgecolor='#377eb8')
+samp_legend, = ax.plot(
+    tt[0,0], tt[0,1], 'o', markerfacecolor='none', markeredgecolor='#377eb8')
 ax.set_xlim([-4.5, 4.5])
 ax.set_ylim([-4.5, 4.5])
 ax.set_xlabel(r'$\theta_1$', fontsize=18)
 ax.set_ylabel(r'$\theta_2$', fontsize=18)
 htext = ax.set_title('Gibbs sampling\npress any key to continue...',
                      fontsize=18)
-ax.legend((el_legend, samp_legend), ('90% HPD', 'Starting point'), numpoints=1)
-pdfline_legend = mlines.Line2D([], [], color='#377eb8')
-chain_legend = mlines.Line2D(
+ax.legend((el_legend, samp_legend), ('90% HPD', 'Starting point'), numpoints=1,
+          loc='lower right')
+pdfline_legend = mpl.lines.Line2D([], [], color='#377eb8')
+chain_legend = mpl.lines.Line2D(
     [], [], color='#377eb8', marker='o',
     markerfacecolor='none', markeredgecolor='#377eb8'
 )
-burnchain_legend = mlines.Line2D(
+burnchain_legend = mpl.lines.Line2D(
     [], [], color='m', marker='o',
     markerfacecolor='none', markeredgecolor='m'
 )
@@ -137,7 +130,8 @@ def update_figure(event):
                       'Starting point',
                      r'Conditional density given $\theta_2$'
                     ),
-                    numpoints=1
+                    numpoints=1,
+                    loc='lower right'
                 )
             else:
                 ax.legend(
@@ -145,7 +139,8 @@ def update_figure(event):
                     ( '90% HPD',
                       'Samples from the chain',
                      r'Conditional density given $\theta_2$'
-                    )
+                    ),
+                    loc='lower right'
                 )
         else:
             line = ax.axvline(x=tt[i,0], linestyle='--', color='k')
@@ -165,7 +160,8 @@ def update_figure(event):
                 ( '90% HPD',
                   'Samples from the chain',
                  r'Conditional density given $\theta_1$'
-                )
+                ),
+                loc='lower right'
             )
         
         fig.canvas.draw()
@@ -185,7 +181,8 @@ def update_figure(event):
                 ( '90% HPD',
                   'Samples from the chain',
                  r'Conditional density given $\theta_2$'
-                )
+                ),
+                loc='lower right'
             )
         fig.canvas.draw()
     
@@ -196,7 +193,8 @@ def update_figure(event):
         icontainer.remove_lines = []
         ax.legend(
             (el_legend, samp_legend),
-            ('90% HPD', 'Samples from the chain')
+            ('90% HPD', 'Samples from the chain'),
+            loc='lower right'
         )
         fig.canvas.draw()
     
@@ -212,7 +210,8 @@ def update_figure(event):
             tt[:icontainer.i+1:2,0], tt[:icontainer.i+1:2,1],
             'o', markerfacecolor='none', markeredgecolor='#377eb8')
         icontainer.samps.append(line)
-        ax.legend((el_legend, chain_legend), ('90% HPD', 'Markov chain'))
+        ax.legend((el_legend, chain_legend), ('90% HPD', 'Markov chain'),
+                  loc='lower right')
         fig.canvas.draw()
     
     elif icontainer.stage == 3:
@@ -246,7 +245,8 @@ def update_figure(event):
         icontainer.samps.append(line)
         ax.legend(
             (el_legend, chain_legend, burnchain_legend),
-            ('90% HPD', 'Markov chain', 'burn-in')
+            ('90% HPD', 'Markov chain', 'burn-in'),
+            loc='lower right'
         )
         fig.canvas.draw()
         
@@ -260,7 +260,8 @@ def update_figure(event):
         icontainer.samps.append(line)
         ax.legend(
             (el_legend, samp_legend),
-            ('90% HPD', 'samples from the chain after burn-in')
+            ('90% HPD', 'samples from the chain after burn-in'),
+            loc='lower right'
         )
         fig.canvas.draw()
         
@@ -274,7 +275,8 @@ def update_figure(event):
         icontainer.samps.append(points)
         ax.legend(
             (el_legend, points),
-            ('90% HPD', '950 samples from the chain')
+            ('90% HPD', '950 samples from the chain'),
+            loc='lower right'
         )
         fig.canvas.draw()
         
