@@ -1,7 +1,7 @@
-"""Bayesian data analysis
+"""Bayesian Data Analysis, 3r ed
 Chapter 3, demo 1
 
-Visualise joint density and marginal densities of posterior of normal 
+Visualise the joint density and marginal densities of posterior of normal 
 distribution with unknown mean and variance.
 
 """
@@ -51,7 +51,7 @@ t1 = np.linspace(tl1[0], tl1[1], 1000)
 tl2 = [10, 60]
 t2 = np.linspace(tl2[0], tl2[1], 1000)
 
-# evaluate joint density in grid
+# evaluate the joint density in a grid
 # note that the following is not normalized, but for plotting
 # contours it does not matter
 Z = stats.norm.pdf(t1, my, t2[:,np.newaxis]/np.sqrt(n))
@@ -62,8 +62,8 @@ Z *= (sinvchi2.pdf(t2**2, n-1, s2)*2*t2)[:,np.newaxis]
 # z=(x-mean(y))/sqrt(s2/n), see BDA3 p. 21
 pm_mu = stats.t.pdf((t1 - my) / np.sqrt(s2/n), n-1) / np.sqrt(s2/n)
 
-# estimate the marginal density for mu using samples and ad hoc Gaussian
-# kernel approximation
+# estimate the marginal density for mu using samples and an ad hoc
+# Gaussian kernel approximation
 pk_mu = stats.gaussian_kde(mu).evaluate(t1)
 
 # compute the exact marginal density for sigma
@@ -72,7 +72,7 @@ pk_mu = stats.gaussian_kde(mu).evaluate(t1)
 pm_sigma = sinvchi2.pdf(t2**2, n-1, s2)*2*t2
 # N.B. this was already calculated in the joint distribution case
 
-# estimate the marginal density for sigma using samples and ad hoc Gaussian
+# estimate the marginal density for sigma using samples and an ad hoc Gaussian
 # kernel approximation
 pk_sigma = stats.gaussian_kde(sigma).evaluate(t2)
 
@@ -83,13 +83,13 @@ pk_sigma = stats.gaussian_kde(sigma).evaluate(t2)
 plotgrid = gridspec.GridSpec(2, 2, width_ratios=[3,2], height_ratios=[3,2])
 plt.figure(figsize=(12,12))
 
-# plot joint distribution
+# plot the joint distribution
 plt.subplot(plotgrid[0,0])
 # plot the contour plot of the exact posterior (c_levels is used to give
 # a vector of linearly spaced values at which levels contours are drawn)
 c_levels = np.linspace(1e-5, Z.max(), 6)[:-1]
 plt.contour(t1, t2, Z, c_levels, colors='blue')
-# plot samples from the joint posterior
+# plot the samples from the joint posterior
 samps = plt.scatter(mu, sigma, 5, color=[0.25, 0.75, 0.25])
 # decorate
 plt.xlim(tl1)
@@ -102,7 +102,7 @@ plt.legend(
     ('exact contour plot', 'samples')
 )
 
-# plot marginal of mu
+# plot the marginal of mu
 plt.subplot(plotgrid[1,0])
 # empirical
 plt.plot(t1, pk_mu, color='#ff8f20', linewidth=2.5, label='empirical')
@@ -114,7 +114,7 @@ plt.title('marginal of $\mu$')
 plt.yticks(())
 plt.legend()
 
-# plot marginal of sigma
+# plot the marginal of sigma
 plt.subplot(plotgrid[0,1])
 # empirical
 plt.plot(pk_sigma, t2, color='#ff8f20', linewidth=2.5, label='empirical')

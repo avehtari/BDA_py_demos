@@ -1,4 +1,4 @@
-"""Bayesian data analysis
+"""Bayesian Data Analysis, 3rd ed
 Chapter 6, demo 4
 
 Posterior predictive checking

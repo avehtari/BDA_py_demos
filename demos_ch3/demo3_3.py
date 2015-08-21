@@ -1,7 +1,7 @@
-"""Bayesian data analysis
+"""Bayesian Data Analysis, 3rd ed
 Chapter 3, demo 3
 
-Visualise marginal distribution of mu as a mixture of normals.
+Visualise the marginal distribution of mu as a mixture of normals.
 
 """
 
@@ -49,7 +49,7 @@ t1 = np.linspace(tl1[0], tl1[1], 1000)
 tl2 = [10, 60]
 t2 = np.linspace(tl2[0], tl2[1], 1000)
 
-# evaluate joint density in grid
+# evaluate the joint density in a grid
 # note that the following is not normalized, but for plotting
 # contours it does not matter
 Z = stats.norm.pdf(t1, my, t2[:,np.newaxis]/np.sqrt(n))
@@ -73,7 +73,7 @@ pm_sigma = sinvchi2.pdf(t2**2, n-1, s2)*2*t2
 plotgrid = gridspec.GridSpec(2, 2, width_ratios=[3,2], height_ratios=[3,2])
 fig = plt.figure(figsize=(14,12))
 
-# plot joint distribution
+# plot the joint distribution
 ax0 = plt.subplot(plotgrid[0,0])
 # plot the contour plot of the exact posterior (c_levels is used to give
 # a vector of linearly spaced values at which levels contours are drawn)
@@ -95,13 +95,13 @@ plt.ylim(tl2)
 plt.title('marginal of $\sigma$')
 plt.xticks(())
 
-# plot marginal of mu (empty first)
+# plot the marginal of mu (empty first)
 ax10 = plt.subplot(plotgrid[1,0])
 plt.xlim(tl1)
 plt.title('marginal of $\mu$')
 plt.yticks(())
 
-# precalculate conditional pdfs for each sample
+# precalculate the conditional pdfs for each sample
 condpdfs = stats.norm.pdf(t1, my, np.sqrt(sigma2/n)[:,np.newaxis])
 
 # function for interactively updating the figure

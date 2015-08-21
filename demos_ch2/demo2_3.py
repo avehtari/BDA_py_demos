@@ -1,4 +1,4 @@
-"""Bayesian data analysis
+"""Bayesian Data Analysis, 3rd ed
 Chapter 2, demo 3
 
 Simulate samples from Beta(438,544), draw a histogram with quantiles, and do 

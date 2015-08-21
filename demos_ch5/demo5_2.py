@@ -1,4 +1,4 @@
-"""Becs-114.1311 Introduction to Bayesian Statistics
+"""Bayesian Data Analysis, 3rd ed
 Chapter 5, demo 2
 
 Hierarchical model for SAT-example data (BDA3, p. 102)
@@ -17,8 +17,8 @@ plt.rc('lines', color='#377eb8', linewidth=2)
 plt.rc('axes', color_cycle=(plt.rcParams['lines.color'],)) # Disable color cycle
 
 # SAT-example data (BDA3 p. 120)
-# y is estimated treatment effect
-# s is standard error of effect estimate
+# y is the estimated treatment effect
+# s is the standard error of effect estimate
 y = np.array([28,  8, -3,  7, -1,  1, 18, 12])
 s = np.array([15, 10, 16, 11,  9, 11, 10, 18])
 M = len(y)
@@ -42,7 +42,7 @@ tsd = hres['tsd']
 tm  = hres['tm']
 
 
-# plot separate, pooled and hierarchical model
+# plot the separate, pooled and hierarchical models
 fig, axes = plt.subplots(3, 1, sharex=True, figsize=(8,10))
 x = np.linspace(-40, 60, 500)
 

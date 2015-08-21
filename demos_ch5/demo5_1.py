@@ -1,4 +1,4 @@
-"""Bayesian data analysis
+"""Bayesian Data Analysis, 3rd ed
 Chapter 5, demo 1
 
 Hierarchical model for Rats experiment (BDA3, p. 102).
@@ -34,7 +34,7 @@ n = np.array([
 M = len(y)
 
 
-# plot separate and pooled model
+# plot the separate and pooled models
 plt.figure(figsize=(8,10))
 x = np.linspace(0, 1, 250)
 
@@ -59,7 +59,7 @@ plt.xlabel(r'$\theta$', fontsize=20)
 plt.title('pooled model')
 
 
-# compute the marginal posterior of alpha and beta in hierarchical model in grid
+# compute the marginal posterior of alpha and beta in the hierarchical model in a grid
 A = np.linspace(0.5, 6, 100)
 B = np.linspace(3, 33, 100)
 # calculated in logarithms for numerical accuracy
@@ -75,7 +75,7 @@ lp = (
         axis=0
     )
 )
-# subtract maximum value to avoid over/underflow in exponentation
+# subtract the maximum value to avoid over/underflow in exponentation
 lp -= lp.max()
 p = np.exp(lp)
 
@@ -102,7 +102,7 @@ samp_B += (np.random.rand(nsamp) - 0.5) * (B[1]-B[0])
 
 
 # Plot samples from the distribution of distributions Beta(alpha,beta),
-# that is, plot Beta(alpha,beta) using posterior samples of alpha and beta
+# that is, plot Beta(alpha,beta) using the posterior samples of alpha and beta
 fig = plt.figure(figsize=(8,10))
 plt.subplot(2, 1, 1)
 plt.plot(x, beta.pdf(x[:,None], samp_A[:20], samp_B[:20]), linewidth=1)
@@ -121,11 +121,11 @@ plt.title(r'Predictive distribution for a new $\theta$ '
           r'and prior for $\theta_j$')
 
 
-# And finally compare separate model and hierarchical model
+# And finally compare the separate model and hierarchical model
 plt.figure(figsize=(8,10))
 x = np.linspace(0, 1, 250)
 
-# first plot separate model (same as above)
+# first plot the separate model (same as above)
 plt.subplot(2, 1, 1)
 # note that for clarity only every 7th distribution is plotted
 plt.plot(x, beta.pdf(x[:,None], y[7:-1:7] + 1, n[7:-1:7] - y[7:-1:7] + 1),
@@ -135,7 +135,7 @@ plt.plot(x, beta.pdf(x, y[-1] + 1, n[-1] - y[-1] + 1), 'r')
 plt.yticks(())
 plt.title('separate model')
 
-# And hierarchical model. Note that these marginal posteriors for theta_j are
+# And the hierarchical model. Note that these marginal posteriors for theta_j are
 # more narrow than in separate model case, due to borrowed information from
 # the other theta_j's.
 plt.subplot(2, 1, 2)

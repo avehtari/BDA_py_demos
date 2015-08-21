@@ -1,7 +1,7 @@
-"""Bayesian data analysis
+"""Bayesian Data Analysis, 3rd ed
 Chapter 3, demo 2
 
-Visualise factored sampling and corresponding marginal and conditional density.
+Visualise factored sampling and the corresponding marginal and conditional densities.
 
 """
 
@@ -49,7 +49,7 @@ t1 = np.linspace(tl1[0], tl1[1], 1000)
 tl2 = [10, 60]
 t2 = np.linspace(tl2[0], tl2[1], 1000)
 
-# evaluate joint density in grid
+# evaluate the joint density in grid
 # note that the following is not normalized, but for plotting
 # contours it does not matter
 Z = stats.norm.pdf(t1, my, t2[:,np.newaxis]/np.sqrt(n))
@@ -68,7 +68,7 @@ pm_sigma = sinvchi2.pdf(t2**2, n-1, s2)*2*t2
 plotgrid = gridspec.GridSpec(1, 2, width_ratios=[3,2])
 fig = plt.figure(figsize=(12,8))
 
-# plot joint distribution
+# plot the joint distribution
 ax0 = plt.subplot(plotgrid[0,0])
 # plot the contour plot of the exact posterior (c_levels is used to give
 # a vector of linearly spaced values at which levels contours are drawn)
@@ -82,7 +82,7 @@ plt.ylabel('$\sigma$', fontsize=20)
 plt.title('joint posterior')
 plt.legend((plt.Line2D([], [], color='blue'),), ('exact contour plot',))
 
-# plot marginal of sigma
+# plot the marginal of sigma
 ax1 = plt.subplot(plotgrid[0,1])
 plt.plot(pm_sigma, t2, 'b', linewidth=1.5)
 # decorate
@@ -130,10 +130,10 @@ def update_figure(event):
         fig.canvas.draw()
     
     elif icontainer.stage == 3:
-        # remove previous lines
+        # remove the previous lines
         ax0.lines.remove(icontainer.prev_line1)
         ax0.lines.remove(icontainer.prev_line2)
-        # resize last scatter sample
+        # resize the last scatter sample
         icontainer.prev_scat.get_sizes()[0] = 8
         # draw next sample
         icontainer.i1 += 1
@@ -151,27 +151,27 @@ def update_figure(event):
         )
         # sample mu given sigma2
         icontainer.prev_scat = ax0.scatter(mu[i1], sigma[i1], 40, color='g')
-        # check if last sample
+        # check if the last sample
         if icontainer.i1 == icontainer.ndraw-1:
             icontainer.stage += 1
         fig.canvas.draw()
     
     elif icontainer.stage == 4:
         icontainer.stage += 1
-        # remove previous lines
+        # remove the previous lines
         ax0.lines.remove(icontainer.prev_line1)
         ax0.lines.remove(icontainer.prev_line2)
-        # resize last scatter sample
+        # resize the last scatter sample
         icontainer.prev_scat.get_sizes()[0] = 8
-        # remove helper text
+        # remove the helper text
         plt.suptitle('')
-        # remove extra legend entries
+        # remove the extra legend entries
         icontainer.legend_h.pop(2)
         icontainer.legend_h.pop(1)
         icontainer.legend_s.pop(2)
         icontainer.legend_s.pop(1)
         ax0.legend(icontainer.legend_h, icontainer.legend_s)
-        # plot remaining samples
+        # plot the remaining samples
         icontainer.i1 += 1
         i1 = icontainer.i1
         ax0.scatter(mu[i1:], sigma[i1:], 8, color='g')

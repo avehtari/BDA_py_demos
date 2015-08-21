@@ -1,8 +1,8 @@
-"""Bayesian data analysis
+"""Bayesian Data Analysis, 3rd ed
 Chapter 6, demo 3
 
 Posterior predictive checking
-Light speed example with poorly chosen test statistic
+Light speed example with a poorly chosen test statistic
 
 """
 
@@ -24,12 +24,12 @@ n = len(y)
 s2 = np.var(y, ddof=1)  # Here ddof=1 is used to get the sample estimate.
 my = np.mean(y)
 
-# Second example of replications
+# A second example of replications
 nsamp = 1000
 pps = np.random.standard_t(n-1, size=(n,nsamp))*np.sqrt(s2*(1+1/n)) + my
-# Use sample variance as a test statistic
-# This is poor choice since it corresponds directly to
-# variance parameter in the model which has been fitted
+# Use the sample variance as a test statistic
+# This is a poor choice since it corresponds directly to
+# the variance parameter in the model which has been fitted
 # to the data.
 pp = np.var(pps, axis=0, ddof=1)
 
@@ -37,7 +37,7 @@ pp = np.var(pps, axis=0, ddof=1)
 plt.hist(pp, 20, label='Variances of the replicated data sets')
 plt.axvline(s2, color='#e41a1c', label='Variance of the original data')
 plt.yticks(())
-plt.title('Light speed example with poorly chosen test statistic\n'
+plt.title('Light speed example with a poorly chosen test statistic\n'
     r'$\operatorname{Pr}(T(y_\mathrm{rep},\theta)\leq T(y,\theta)|y)=0.42$')
 plt.legend()
 # make room for the title and legend

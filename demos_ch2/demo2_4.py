@@ -1,4 +1,4 @@
-"""Bayesian data analysis
+"""Bayesian Data Analysis, 3rd ed
 Chapter 2, demo 4
 
 Calculate the posterior distribution on a discrete grid of points by 
@@ -28,7 +28,7 @@ nx = 1000
 x = np.linspace(0, 1, nx)
 
 # Compute density of non-conjugate prior in grid
-# This non-conjugate prior is same as in figure 2.4 in the book
+# This non-conjugate prior is same as in Figure 2.4 in the book
 pp = np.ones(nx)
 ascent = (0.385 <= x) & (x <= 0.485)
 descent = (0.485 <= x) & (x <= 0.585)
@@ -38,7 +38,7 @@ pp[descent] = np.linspace(pm, 1, np.count_nonzero(descent))
 # Normalize the prior
 pp /= np.sum(pp)
 
-# Unnormalsed non-conjugate posterior in grid
+# Unnormalised non-conjugate posterior in grid
 po = beta.pdf(x, a, b)*pp
 po /= np.sum(po)
 # Cumulative

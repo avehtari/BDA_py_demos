@@ -1,4 +1,4 @@
-"""Bayesian data analysis
+"""Bayesian Data Analysis, 3rd ed
 Chapter 6, demo 1
 
 Posterior predictive checking demo
@@ -26,7 +26,7 @@ s = np.sqrt(s2)
 my = np.mean(y)
 
 # Create 9 random replicate data sets from the posterior predictive density.
-# Each set has same number of virtyal observations as the original data set.
+# Each set has same number of virtual observations as the original data set.
 replicates = np.random.standard_t(n-1, size=(9,n)) * np.sqrt(1+1/n)*s + my
 
 # plot them along with the real data set in random order subplot

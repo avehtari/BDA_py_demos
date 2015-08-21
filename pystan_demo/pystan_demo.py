@@ -1,4 +1,4 @@
-"""Bayesian data analysis
+"""Bayesian Data Analysis, 3rd ed
 PyStan demo
 
 Demo for using Stan with Python interface PyStan.

@@ -1,4 +1,4 @@
-"""Bayesian data analysis
+"""Bayesian Data Analysis, 3rd ed
 Chapter 3, demo 4
 
 Visualise sampling from the posterior predictive distribution.
@@ -54,7 +54,7 @@ t2 = np.linspace(tl2[0], tl2[1], 1000)
 tlynew = [50, 185]
 xynew = np.linspace(tlynew[0], tlynew[1], 1000)
 
-# evaluate joint density in grid
+# evaluate the joint density in a grid
 # note that the following is not normalized, but for plotting
 # contours it does not matter
 Z = stats.norm.pdf(t1, my, t2[:,np.newaxis]/np.sqrt(n))
@@ -71,12 +71,12 @@ p_new = stats.t.pdf((xynew-my)/np.sqrt(s2*(1+1/n)), n-1) / np.sqrt(s2*(1+1/n))
 # create figure
 fig, axes = plt.subplots(nrows=1, ncols=2, figsize=(12,8))
 
-# plot joint distribution
+# plot the joint distribution
 # plot the contour plot of the exact posterior (c_levels is used to give
 # a vector of linearly spaced values at which levels contours are drawn)
 c_levels = np.linspace(1e-5, Z.max(), 6)[:-1]
 axes[0].contour(t1, t2, Z, c_levels, colors='blue')
-# plot samples from the joint posterior
+# plot the samples from the joint posterior
 samps = axes[0].scatter(mu, sigma, 5, color=[0.25, 0.75, 0.25])
 # decorate
 axes[0].set_xlim(tl1)
@@ -96,7 +96,7 @@ ax0_hs = axes[0].scatter(mu[0], sigma[0], 40, 'r')
 # plot ynew
 # precalculate each predictive pdf with given mu and sigma
 ynewdists = stats.norm.pdf(xynew, mu[:,np.newaxis], sigma[:,np.newaxis])
-# plot first distribution and the respective sample
+# plot the first distribution and the respective sample
 line1, = axes[1].plot(xynew, ynewdists[0], 'b', linewidth=1.5)
 ax1_hs = axes[1].scatter(ynew[0], 0.02*np.max(ynewdists), 40, 'r')
 # decorate

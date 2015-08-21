@@ -1,4 +1,4 @@
-"""Bayesian data analysis
+"""Bayesian Data Analysis, 3rd ed
 Chapter 3, demo 6
 
 Illustrate posterior inference for Bioassay data (BDA3 p. 74-).
@@ -69,7 +69,7 @@ samp_ld50 = -samp_A[bpi]/samp_B[bpi]
 
 # ====== Plotting
 
-# plot posterior density
+# plot the posterior density
 fig = plt.figure(figsize=(10,12))
 plt.subplot(3,1,1)
 plt.imshow(p, origin='lower', aspect='auto', extent=(A[0], A[-1], B[0], B[-1]))
@@ -78,7 +78,7 @@ plt.ylim([-2,40])
 plt.xlabel(r'$\alpha$', fontsize=18)
 plt.ylabel(r'$\beta$', fontsize=18)
 
-# plot samples
+# plot the samples
 plt.subplot(3,1,2)
 plt.scatter(samp_A, samp_B, 10, linewidth=0)
 plt.xlim([-2,8])
@@ -86,7 +86,7 @@ plt.ylim([-2,40])
 plt.xlabel(r'$\alpha$', fontsize=18)
 plt.ylabel(r'$\beta$', fontsize=18)
 
-# plot histogram of LD50
+# plot the histogram of LD50
 plt.subplot(3,1,3)
 plt.hist(samp_ld50, np.arange(-0.5, 0.51, 0.02))
 plt.xlim([-0.5, 0.5])

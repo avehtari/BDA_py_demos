@@ -1,8 +1,8 @@
-"""Bayesian data analysis
+"""Bayesian data analysis, 3rd ed
 Chapter 2, demo 2
 
-Illustrate the effect of prior. Comparison of posterior distributions with 
-different parameter values for the beta prior distribution.
+Illustrate the effect of a prior. Comparison of posterior distributions with 
+different parameter values for Beta prior distribution.
 
 """
 

@@ -1,7 +1,7 @@
-"""Bayesian data analysis
+"""Bayesian Data Analysis, 3rd ed
 Chapter 3, demo 5
 
-Demonstrate normal model for the Newcomb's data (BDA3 p. 66).
+Demonstrate a normal model for the Newcomb's data (BDA3 p. 66).
 
 """
 
@@ -59,11 +59,11 @@ axes[0].set_title('Newcomb\'s measurements')
 axes[0].set_ylabel('count')
 plt.setp(axes[0].get_xticklabels(), visible=True)
 
-# plot posterior of mu
+# plot the posterior of mu
 axes[1].plot(t1, pm_mu)
-# plot posterior of mu in the filtered case
+# plot the posterior of mu in the filtered case
 axes[1].plot(t1, pm_mu_pos)
-# Plot currently accepted true value
+# Plot the currently accepted true value
 axes[1].axvline(33, color='k', linestyle='--', linewidth=1.5)
 axes[1].legend(
     ('posterior of $\mu$',

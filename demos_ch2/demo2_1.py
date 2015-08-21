@@ -1,4 +1,4 @@
-"""Bayesian data analysis
+"""Bayesian Data Analysis, 3rd ed
 Chapter 2, demo 1
 
 437 girls and 543 boys have been observed. Calculate and plot the posterior 
