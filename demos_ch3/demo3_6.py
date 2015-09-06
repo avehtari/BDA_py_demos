@@ -80,7 +80,7 @@ plt.ylabel(r'$\beta$', fontsize=18)
 
 # plot the samples
 plt.subplot(3,1,2)
-plt.scatter(samp_A, samp_B, 10, linewidth=0)
+plt.scatter(samp_A, samp_B, 10, c='#377eb8', linewidth=0)
 plt.xlim([-2,8])
 plt.ylim([-2,40])
 plt.xlabel(r'$\alpha$', fontsize=18)
