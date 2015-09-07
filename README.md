@@ -1,4 +1,4 @@
-# Bayesian Data Analysis
+# Bayesian Data Analysis Python Demos
 This repository contains some Python demos for the book [Bayesian Data
 Analysis, 3rd ed by Gelman, Carlin, Stern, Dunson, Vehtari, and Rubin (BDA3)](http://www.stat.columbia.edu/~gelman/book/).
 
@@ -10,3 +10,5 @@ to install anything.
 
 The demos were originally written for Matlab by Aki Vehtari and
 translated to Python by Tuomas Sivula.
+
+The corresponding [Matlab/Octave demos](https://github.com/avehtari/BDA_m_demos)
