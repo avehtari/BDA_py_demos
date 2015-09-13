@@ -8,7 +8,8 @@ All demos have also notebook versions (.ipynb). When these are viewed
 in github, the pre-generated figures are directly shown without need
 to install anything.
 
-The demos were originally written for Matlab by Aki Vehtari and
-translated to Python by Tuomas Sivula.
+The demos were originally written for Matlab by [Aki
+Vehtari](http://users.aalto.fi/~ave/) and translated to Python by
+[Tuomas Sivula](https://github.com/tsivula).
 
 The corresponding [Matlab/Octave demos](https://github.com/avehtari/BDA_m_demos)
