@@ -245,7 +245,7 @@ def update_figure(event):
         icontainer.samps.append(line)
         ax.legend(
             (el_legend, chain_legend, burnchain_legend),
-            ('90% HPD', 'Markov chain', 'burn-in'),
+            ('90% HPD', 'Markov chain', 'warm-up'),
             loc='lower right'
         )
         fig.canvas.draw()
@@ -260,7 +260,7 @@ def update_figure(event):
         icontainer.samps.append(line)
         ax.legend(
             (el_legend, samp_legend),
-            ('90% HPD', 'samples from the chain after burn-in'),
+            ('90% HPD', 'samples from the chain after warm-up'),
             loc='lower right'
         )
         fig.canvas.draw()
