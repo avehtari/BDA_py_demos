@@ -135,8 +135,8 @@ model {
 }
 """
 # Data for Stan
-d = np.loadtxt('kilpisjarvi-summer-temp.csv', dtype=np.double, delimiter=';',
-               skiprows=1)
+data_path = '../utilities_and_data/kilpisjarvi-summer-temp.csv'
+d = np.loadtxt(data_path, dtype=np.double, delimiter=';', skiprows=1)
 x = np.repeat(d[:,0], 4)
 y = d[:,1:5].ravel()
 N = len(x)
@@ -202,8 +202,8 @@ model {
 }
 """
 # Data for Stan
-d = np.loadtxt('kilpisjarvi-summer-temp.csv', dtype=np.double, delimiter=';',
-               skiprows=1)
+data_path = '../utilities_and_data/kilpisjarvi-summer-temp.csv'
+d = np.loadtxt(data_path, dtype=np.double, delimiter=';', skiprows=1)
 x = np.repeat(d[:,0], 4)
 y = d[:,1:5].ravel()
 N = len(x)
