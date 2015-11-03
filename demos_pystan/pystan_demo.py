@@ -120,6 +120,7 @@ data {
     int<lower=0> N; // number of data points 
     vector[N] x; // 
     vector[N] y; // 
+    real xpred; // input location for prediction
 }
 parameters {
     real alpha; 
@@ -133,6 +134,10 @@ transformed parameters {
 model {
     y ~ normal(mu, sigma);
 }
+generated quantities {
+    real ypred;
+    ypred <- normal_rng(alpha + beta*xpred, sigma);
+}
 """
 # Data for Stan
 data_path = '../utilities_and_data/kilpisjarvi-summer-temp.csv'
@@ -140,7 +145,8 @@ d = np.loadtxt(data_path, dtype=np.double, delimiter=';', skiprows=1)
 x = np.repeat(d[:,0], 4)
 y = d[:,1:5].ravel()
 N = len(x)
-data = dict(N=N, x=x, y=y)
+xpred = 2016
+data = dict(N=N, x=x, y=y, xpred=xpred)
 # Compile and fit the model
 fit = pystan.stan(model_code=linear_code, data=data)
 
@@ -169,8 +175,8 @@ plt.hist(samples['beta'], 50)
 plt.xlabel('beta')
 print 'Pr(beta > 0) = {}'.format(np.mean(samples['beta']>0))
 plt.subplot(3,1,3)
-plt.hist(samples['sigma'], 50)
-plt.xlabel('sigma')
+plt.hist(samples['ypred'], 50)
+plt.xlabel('y-prediction for x={}'.format(xpred))
 plt.tight_layout()
 plt.show()
 
