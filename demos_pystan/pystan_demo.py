@@ -417,8 +417,8 @@ data {
     vector[N] y; // 
 }
 parameters {
-    vector[K] mu;    // group means
-    real sigma;      // common stds
+    vector[K] mu;        // group means
+    real<lower=0> sigma; // common stds
 }
 model {
     for (n in 1:N)
@@ -520,7 +520,7 @@ parameters {
     real mu0;             // prior mean 
     real<lower=0> sigma0; // prior std 
     vector[K] mu;         // group means 
-    real sigma;           // common std 
+    real<lower=0> sigma;  // common std 
 }
 model {
     mu0 ~ normal(10,10);      // weakly informative prior 
