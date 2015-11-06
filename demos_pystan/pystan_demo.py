@@ -15,7 +15,8 @@ plt.rc('lines', color='#377eb8', linewidth=2)
 plt.rc('axes', color_cycle=('#377eb8','#e41a1c','#4daf4a',
                             '#984ea3','#ff7f00','#ffff33'))
 
-# ====== Bernoulli model =======================================================
+# ==== Bernoulli model =========================================================
+# ==============================================================================
 bernoulli_code = """
 data {
   int<lower=0> N;
@@ -38,7 +39,8 @@ plt.hist(samples['theta'], 50)
 plt.show()
 
 
-# ====== Vectorized Bernoulli model ============================================
+# ==== Vectorized Bernoulli model ==============================================
+# ==============================================================================
 bernoulli_code = """
 data {
   int<lower=0> N;
@@ -56,7 +58,8 @@ data = dict(N=10, y=[1,1,1,0,1,1,1,0,1,1])
 fit = pystan.stan(model_code=bernoulli_code, data=data)
 
 
-# ====== Binomial model ========================================================
+# ==== Binomial model ==========================================================
+# ==============================================================================
 binomial_code = """
 data {
   int<lower=0> N;
@@ -76,7 +79,8 @@ samples = fit.extract(permuted=True)
 plt.hist(samples['theta'], 50)
 plt.show()
 
-# ====== Re-running Binomial model with new data ===============================
+# ==== Re-running Binomial model with new data =================================
+# ==============================================================================
 data = dict(N=10, y=10)
 fit = pystan.stan(fit=fit, data=data)
 samples = fit.extract(permuted=True)
@@ -84,7 +88,8 @@ plt.hist(samples['theta'], 50)
 plt.show()
 
 
-# ====== Comparison of two groups with Binomial ================================
+# ==== Comparison of two groups with Binomial ==================================
+# ==============================================================================
 binomial_code = """
 data {
   int<lower=0> N1;
@@ -114,7 +119,8 @@ plt.hist(samples['oddsratio'], 50)
 plt.show()
 
 
-# ====== Gaussian linear model =================================================
+# ==== Gaussian linear model ===================================================
+# ==============================================================================
 linear_code = """
 data {
     int<lower=0> N; // number of data points 
@@ -181,7 +187,8 @@ plt.tight_layout()
 plt.show()
 
 
-# ====== Gaussian linear model with adjustable priors ==========================
+# ==== Gaussian linear model with adjustable priors ============================
+# ==============================================================================
 linear_code = """
 data {
     int<lower=0> N; // number of data points 
@@ -257,7 +264,8 @@ plt.tight_layout()
 plt.show()
 
 
-# ====== Gaussian linear model with standardized data ==========================
+# ==== Gaussian linear model with standardized data ============================
+# ==============================================================================
 linear_code = """
 data {
     int<lower=0> N; // number of data points 
@@ -332,7 +340,8 @@ plt.tight_layout()
 plt.show()
 
 
-# ====== Gaussian linear student-t model =======================================
+# ==== Gaussian linear student-t model =========================================
+# ==============================================================================
 linear_code = """
 data {
     int<lower=0> N; // number of data points 
@@ -398,7 +407,57 @@ plt.tight_layout()
 plt.show()
 
 
-# ====== Comparison of k groups (ANOVA) ========================================
+# ==== Comparison of k groups with equal variances (ANOVA) =====================
+# ==============================================================================
+group_code = """
+data {
+    int<lower=0> N; // number of data points 
+    int<lower=0> K; // number of groups 
+    int<lower=1,upper=K> x[N]; // group indicator 
+    vector[N] y; // 
+}
+parameters {
+    vector[K] mu;    // group means
+    real sigma;      // common stds
+}
+model {
+    for (n in 1:N)
+      y[n] ~ normal(mu[x[n]], sigma);
+}
+"""
+# Data for Stan
+data_path = '../utilities_and_data/kilpisjarvi-summer-temp.csv'
+d = np.loadtxt(data_path, dtype=np.double, delimiter=';', skiprows=1)
+# Is there difference between different summer months?
+x = np.tile(np.arange(1,5), d.shape[0]) # summer months are numbered from 1 to 4
+y = d[:,1:5].ravel()
+N = len(x)
+data = dict(
+    N = N,
+    K = 4,  # 4 groups
+    x = x,  # group indicators
+    y = y   # observations
+)
+# Compile and fit the model
+fit = pystan.stan(model_code=group_code, data=data)
+
+# Analyse results
+mu = fit.extract(permuted=True)['mu']
+# Matrix of probabilities that one mu is larger than other
+ps = np.zeros((4,4))
+for k1 in range(4):
+    for k2 in range(k1+1,4):
+        ps[k1,k2] = np.mean(mu[:,k1]>mu[:,k2])
+        ps[k2,k1] = 1 - ps[k1,k2]
+print "Matrix of probabilities that one mu is larger than other:"
+print ps
+# Plot
+plt.boxplot(mu)
+plt.show()
+
+
+# ==== Comparison of k groups with unequal variances ===========================
+# ==============================================================================
 group_code = """
 data {
     int<lower=0> N; // number of data points 
@@ -446,7 +505,8 @@ plt.boxplot(mu)
 plt.show()
 
 
-# ====== Hierarchical prior model for comparison of k groups (ANOVA) ===========
+# ==== Hierarchical prior for means in comparison of k groups ==================
+# ==============================================================================
 # results do not differ much from the previous, because there is only
 # few groups and quite much data per group, but this works as an example anyway
 hier_code = """
@@ -460,12 +520,72 @@ parameters {
     real mu0;             // prior mean 
     real<lower=0> sigma0; // prior std 
     vector[K] mu;         // group means 
-    vector<lower=0>[K] sigma; // group stds 
+    real sigma;           // common std 
 }
 model {
     mu0 ~ normal(10,10);      // weakly informative prior 
     sigma0 ~ cauchy(0,4);     // weakly informative prior 
     mu ~ normal(mu0, sigma0); // population prior with unknown parameters
+    sigma ~ cauchy(0,4);      // weakly informative prior
+    for (n in 1:N)
+      y[n] ~ normal(mu[x[n]], sigma);
+}
+"""
+# Data for Stan
+data_path = '../utilities_and_data/kilpisjarvi-summer-temp.csv'
+d = np.loadtxt(data_path, dtype=np.double, delimiter=';', skiprows=1)
+# Is there difference between different summer months?
+x = np.tile(np.arange(1,5), d.shape[0]) # summer months are numbered from 1 to 4
+y = d[:,1:5].ravel()
+N = len(x)
+data = dict(
+    N = N,
+    K = 4,  # 4 groups
+    x = x,  # group indicators
+    y = y   # observations
+)
+# Compile and fit the model
+fit = pystan.stan(model_code=hier_code, data=data)
+
+# Analyse results
+samples = fit.extract(permuted=True)
+print "std(mu0): {}".format(np.std(samples['mu0']))
+mu = samples['mu']
+# Matrix of probabilities that one mu is larger than other
+ps = np.zeros((4,4))
+for k1 in range(4):
+    for k2 in range(k1+1,4):
+        ps[k1,k2] = np.mean(mu[:,k1]>mu[:,k2])
+        ps[k2,k1] = 1 - ps[k1,k2]
+print "Matrix of probabilities that one mu is larger than other:"
+print ps
+# Plot
+plt.boxplot(mu)
+plt.show()
+
+
+# ==== Hierarchical prior for means and variances in comparison of k groups ====
+# ==============================================================================
+# results do not differ much from the previous, because there is only
+# few groups and quite much data per group, but this works as an example anyway
+hier_code = """
+data {
+    int<lower=0> N; // number of data points 
+    int<lower=0> K; // number of groups 
+    int<lower=1,upper=K> x[N]; // group indicator 
+    vector[N] y; // 
+}
+parameters {
+    real mu0;             // prior mean 
+    real<lower=0> sigma0; // prior std 
+    vector[K] mu;         // group means 
+    real sigma;           // common std
+}
+model {
+    mu0 ~ normal(10,10);      // weakly informative prior 
+    sigma0 ~ cauchy(0,4);     // weakly informative prior 
+    mu ~ normal(mu0, sigma0); // population prior with unknown parameters
+    sigma ~ cauchy(0,4);      // weakly informative prior
     for (n in 1:N)
       y[n] ~ normal(mu[x[n]], sigma[x[n]]);
 }
@@ -501,4 +621,68 @@ print ps
 # Plot
 plt.boxplot(mu)
 plt.show()
+
+
+# ==== Hierarchical prior for means and variances in comparison of k groups ====
+# ==============================================================================
+# results do not differ much from the previous, because there is only
+# few groups and quite much data per group, but this works as an example anyway
+hier_code = """
+data {
+    int<lower=0> N; // number of data points 
+    int<lower=0> K; // number of groups 
+    int<lower=1,upper=K> x[N]; // group indicator 
+    vector[N] y; // 
+}
+parameters {
+    real mu0;                 // prior mean 
+    real<lower=0> musigma0;   // prior std 
+    vector[K] mu;             // group means
+    real lsigma0;
+    real<lower=0> lsigma0s;
+    vector<lower=0>[K] sigma; // group stds 
+}
+model {
+    mu0 ~ normal(100,10);        // weakly informative prior 
+    musigma0 ~ cauchy(0,10);     // weakly informative prior 
+    mu ~ normal(mu0, musigma0);  // population prior with unknown parameters
+    lsigma0 ~ normal(2,1);       // weakly informative prior
+    lsigma0s ~ normal(0,2);      // weakly informative prior
+    sigma ~ lognormal(lsigma0, lsigma0s); // population prior with unknown parameters
+    for (n in 1:N)
+      y[n] ~ normal(mu[x[n]], sigma[x[n]]);
+}
+"""
+# Data for Stan
+data_path = '../utilities_and_data/kilpisjarvi-summer-temp.csv'
+d = np.loadtxt(data_path, dtype=np.double, delimiter=';', skiprows=1)
+# Is there difference between different summer months?
+x = np.tile(np.arange(1,5), d.shape[0]) # summer months are numbered from 1 to 4
+y = d[:,1:5].ravel()
+N = len(x)
+data = dict(
+    N = N,
+    K = 4,  # 4 groups
+    x = x,  # group indicators
+    y = y   # observations
+)
+# Compile and fit the model
+fit = pystan.stan(model_code=hier_code, data=data)
+
+# Analyse results
+samples = fit.extract(permuted=True)
+print "std(mu0): {}".format(np.std(samples['mu0']))
+mu = samples['mu']
+# Matrix of probabilities that one mu is larger than other
+ps = np.zeros((4,4))
+for k1 in range(4):
+    for k2 in range(k1+1,4):
+        ps[k1,k2] = np.mean(mu[:,k1]>mu[:,k2])
+        ps[k2,k1] = 1 - ps[k1,k2]
+print "Matrix of probabilities that one mu is larger than other:"
+print ps
+# Plot
+plt.boxplot(mu)
+plt.show()
+
 
