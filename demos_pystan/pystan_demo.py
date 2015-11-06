@@ -576,65 +576,6 @@ data {
     vector[N] y; // 
 }
 parameters {
-    real mu0;             // prior mean 
-    real<lower=0> sigma0; // prior std 
-    vector[K] mu;         // group means 
-    real sigma;           // common std
-}
-model {
-    mu0 ~ normal(10,10);      // weakly informative prior 
-    sigma0 ~ cauchy(0,4);     // weakly informative prior 
-    mu ~ normal(mu0, sigma0); // population prior with unknown parameters
-    sigma ~ cauchy(0,4);      // weakly informative prior
-    for (n in 1:N)
-      y[n] ~ normal(mu[x[n]], sigma[x[n]]);
-}
-"""
-# Data for Stan
-data_path = '../utilities_and_data/kilpisjarvi-summer-temp.csv'
-d = np.loadtxt(data_path, dtype=np.double, delimiter=';', skiprows=1)
-# Is there difference between different summer months?
-x = np.tile(np.arange(1,5), d.shape[0]) # summer months are numbered from 1 to 4
-y = d[:,1:5].ravel()
-N = len(x)
-data = dict(
-    N = N,
-    K = 4,  # 4 groups
-    x = x,  # group indicators
-    y = y   # observations
-)
-# Compile and fit the model
-fit = pystan.stan(model_code=hier_code, data=data)
-
-# Analyse results
-samples = fit.extract(permuted=True)
-print "std(mu0): {}".format(np.std(samples['mu0']))
-mu = samples['mu']
-# Matrix of probabilities that one mu is larger than other
-ps = np.zeros((4,4))
-for k1 in range(4):
-    for k2 in range(k1+1,4):
-        ps[k1,k2] = np.mean(mu[:,k1]>mu[:,k2])
-        ps[k2,k1] = 1 - ps[k1,k2]
-print "Matrix of probabilities that one mu is larger than other:"
-print ps
-# Plot
-plt.boxplot(mu)
-plt.show()
-
-
-# ==== Hierarchical prior for means and variances in comparison of k groups ====
-# ==============================================================================
-# results do not differ much from the previous, because there is only
-# few groups and quite much data per group, but this works as an example anyway
-hier_code = """
-data {
-    int<lower=0> N; // number of data points 
-    int<lower=0> K; // number of groups 
-    int<lower=1,upper=K> x[N]; // group indicator 
-    vector[N] y; // 
-}
-parameters {
     real mu0;                 // prior mean 
     real<lower=0> musigma0;   // prior std 
     vector[K] mu;             // group means
@@ -643,12 +584,12 @@ parameters {
     vector<lower=0>[K] sigma; // group stds 
 }
 model {
-    mu0 ~ normal(10,10);        // weakly informative prior 
+    mu0 ~ normal(10,10);         // weakly informative prior 
     musigma0 ~ cauchy(0,10);     // weakly informative prior 
     mu ~ normal(mu0, musigma0);  // population prior with unknown parameters
     lsigma0 ~ normal(0,1);       // weakly informative prior
     lsigma0s ~ normal(0,1);      // weakly informative prior
-    sigma ~ lognormal(lsigma0, lsigma0s); // population prior with unknown parameters
+    sigma ~ lognormal(lsigma0, lsigma0s); // popul prior with unknown params
     for (n in 1:N)
       y[n] ~ normal(mu[x[n]], sigma[x[n]]);
 }
@@ -684,5 +625,4 @@ print ps
 # Plot
 plt.boxplot(mu)
 plt.show()
-
 
