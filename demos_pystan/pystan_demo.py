@@ -142,7 +142,10 @@ model {
 }
 generated quantities {
     real ypred;
+    vector[N] log_lik;
     ypred <- normal_rng(alpha + beta*xpred, sigma);
+    for (n in 1:N)
+        log_lik[n] <- normal_log(y[n], alpha + beta*x[n], sigma);
 }
 """
 # Data for Stan
@@ -155,6 +158,11 @@ xpred = 2016
 data = dict(N=N, x=x, y=y, xpred=xpred)
 # Compile and fit the model
 fit = pystan.stan(model_code=linear_code, data=data)
+
+# Module psis.py in github repository https://github.com/avehtari/PSIS provide
+# function psisloo() for calculating Pareto smoothed importance sampling (PSIS)
+# leave-one-out cross-validation.
+# loo, loos, ks = psisloo(samples['log_lik'])
 
 # Plot
 samples = fit.extract(permuted=True)
