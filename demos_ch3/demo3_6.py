@@ -38,16 +38,19 @@ y = np.array([0, 1, 3, 5])
 #    are sensible
 A = np.linspace(-4, 8, 50)
 B = np.linspace(-10, 40, 50)
-ilogit_abx = 1 / (np.exp(-(A[:,None] + B[:,None,None] * x)) + 1)
-p = np.prod(ilogit_abx**y * (1 - ilogit_abx)**(n - y), axis=2)
+inverse_logit_abx = 1 / (np.exp(-(A[:,None] + B[:,None,None] * x)) + 1)
+p = np.prod(inverse_logit_abx**y * (1 - inverse_logit_abx)**(n - y), axis=2)
 
 # alternative "bad" way of calcuting the above two lines in a for loop
 '''
 p = np.empty((len(B),len(A))) # allocate space
 for i in range(len(A)):
     for j in range(len(B)):
-        ilogit_abx_ij = (1 / (np.exp(-(A[i] + B[j] * x)) + 1))
-        p[j,i] = np.prod(ilogit_abx_ij**y * ilogit_abx_ij**(n - y))
+        inverse_logit_abx_ij = (1 / (np.exp(-(A[i] + B[j] * x)) + 1))
+        p[j,i] = np.prod(
+            inverse_logit_abx_ij**y *
+            (1 - inverse_logit_abx_ij)**(n - y)
+        )
 '''
 
 # sample from the grid
