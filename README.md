@@ -14,4 +14,4 @@ The demos were originally written for Matlab by [Aki
 Vehtari](http://users.aalto.fi/~ave/) and translated to Python by
 [Tuomas Sivula](https://github.com/tsivula).
 
-The corresponding [Matlab/Octave demos](https://github.com/avehtari/BDA_m_demos)
+The corresponding [R demos](https://github.com/avehtari/BDA_R_demos) and [Matlab/Octave demos](https://github.com/avehtari/BDA_m_demos)
