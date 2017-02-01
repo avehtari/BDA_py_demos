@@ -101,15 +101,15 @@ parameters {
   real<lower=0,upper=1> theta1;
   real<lower=0,upper=1> theta2;
 }
-transformed parameters {
-  real oddsratio;
-  oddsratio <- (theta2/(1-theta2))/(theta1/(1-theta1));
-}
 model {
   theta1 ~ beta(1,1);
   theta2 ~ beta(1,1);
   y1 ~ binomial(N1,theta1);
   y2 ~ binomial(N2,theta2);
+}
+generated quantities {
+  real oddsratio;
+  oddsratio <- (theta2/(1-theta2))/(theta1/(1-theta1));
 }
 """
 data = dict(N1=674, y1=39, N2=680, y2=22)
@@ -142,19 +142,27 @@ model {
 }
 generated quantities {
     real ypred;
+    vector[N] log_lik;
     ypred <- normal_rng(alpha + beta*xpred, sigma);
+    for (n in 1:N)
+        log_lik[n] <- normal_log(y[n], alpha + beta*x[n], sigma);
 }
 """
 # Data for Stan
 data_path = '../utilities_and_data/kilpisjarvi-summer-temp.csv'
 d = np.loadtxt(data_path, dtype=np.double, delimiter=';', skiprows=1)
-x = np.repeat(d[:,0], 4)
-y = d[:,1:5].ravel()
+x = np.repeat(d[:,0], 3)
+y = d[:,1:4].ravel()
 N = len(x)
 xpred = 2016
 data = dict(N=N, x=x, y=y, xpred=xpred)
 # Compile and fit the model
 fit = pystan.stan(model_code=linear_code, data=data)
+
+# Module psis.py in github repository https://github.com/avehtari/PSIS provide
+# function psisloo() for calculating Pareto smoothed importance sampling (PSIS)
+# leave-one-out cross-validation.
+# loo, loos, ks = psisloo(samples['log_lik'])
 
 # Plot
 samples = fit.extract(permuted=True)
@@ -217,8 +225,8 @@ model {
 # Data for Stan
 data_path = '../utilities_and_data/kilpisjarvi-summer-temp.csv'
 d = np.loadtxt(data_path, dtype=np.double, delimiter=';', skiprows=1)
-x = np.repeat(d[:,0], 4)
-y = d[:,1:5].ravel()
+x = np.repeat(d[:,0], 3)
+y = d[:,1:4].ravel()
 N = len(x)
 data = dict(
     N = N,
@@ -302,8 +310,8 @@ generated quantities {
 # Data for Stan
 data_path = '../utilities_and_data/kilpisjarvi-summer-temp.csv'
 d = np.loadtxt(data_path, dtype=np.double, delimiter=';', skiprows=1)
-x = np.repeat(d[:,0], 4)
-y = d[:,1:5].ravel()
+x = np.repeat(d[:,0], 3)
+y = d[:,1:4].ravel()
 N = len(x)
 data = dict(N = N, x = x, y = y)
 # Compile and fit the model
@@ -366,8 +374,8 @@ model {
 # Data for Stan
 data_path = '../utilities_and_data/kilpisjarvi-summer-temp.csv'
 d = np.loadtxt(data_path, dtype=np.double, delimiter=';', skiprows=1)
-x = np.repeat(d[:,0], 4)
-y = d[:,1:5].ravel()
+x = np.repeat(d[:,0], 3)
+y = d[:,1:4].ravel()
 N = len(x)
 data = dict(N = N, x = x, y = y)
 # Compile and fit the model
@@ -429,12 +437,12 @@ model {
 data_path = '../utilities_and_data/kilpisjarvi-summer-temp.csv'
 d = np.loadtxt(data_path, dtype=np.double, delimiter=';', skiprows=1)
 # Is there difference between different summer months?
-x = np.tile(np.arange(1,5), d.shape[0]) # summer months are numbered from 1 to 4
-y = d[:,1:5].ravel()
+x = np.tile(np.arange(1,4), d.shape[0]) # summer months are numbered from 1 to 3
+y = d[:,1:4].ravel()
 N = len(x)
 data = dict(
     N = N,
-    K = 4,  # 4 groups
+    K = 3,  # 3 groups
     x = x,  # group indicators
     y = y   # observations
 )
@@ -444,9 +452,9 @@ fit = pystan.stan(model_code=group_code, data=data)
 # Analyse results
 mu = fit.extract(permuted=True)['mu']
 # Matrix of probabilities that one mu is larger than other
-ps = np.zeros((4,4))
-for k1 in range(4):
-    for k2 in range(k1+1,4):
+ps = np.zeros((3,3))
+for k1 in range(3):
+    for k2 in range(k1+1,3):
         ps[k1,k2] = np.mean(mu[:,k1]>mu[:,k2])
         ps[k2,k1] = 1 - ps[k1,k2]
 print "Matrix of probabilities that one mu is larger than other:"
@@ -478,12 +486,12 @@ model {
 data_path = '../utilities_and_data/kilpisjarvi-summer-temp.csv'
 d = np.loadtxt(data_path, dtype=np.double, delimiter=';', skiprows=1)
 # Is there difference between different summer months?
-x = np.tile(np.arange(1,5), d.shape[0]) # summer months are numbered from 1 to 4
-y = d[:,1:5].ravel()
+x = np.tile(np.arange(1,4), d.shape[0]) # summer months are numbered from 1 to 3
+y = d[:,1:4].ravel()
 N = len(x)
 data = dict(
     N = N,
-    K = 4,  # 4 groups
+    K = 3,  # 3 groups
     x = x,  # group indicators
     y = y   # observations
 )
@@ -493,9 +501,9 @@ fit = pystan.stan(model_code=group_code, data=data)
 # Analyse results
 mu = fit.extract(permuted=True)['mu']
 # Matrix of probabilities that one mu is larger than other
-ps = np.zeros((4,4))
-for k1 in range(4):
-    for k2 in range(k1+1,4):
+ps = np.zeros((3,3))
+for k1 in range(3):
+    for k2 in range(k1+1,3):
         ps[k1,k2] = np.mean(mu[:,k1]>mu[:,k2])
         ps[k2,k1] = 1 - ps[k1,k2]
 print "Matrix of probabilities that one mu is larger than other:"
@@ -535,12 +543,12 @@ model {
 data_path = '../utilities_and_data/kilpisjarvi-summer-temp.csv'
 d = np.loadtxt(data_path, dtype=np.double, delimiter=';', skiprows=1)
 # Is there difference between different summer months?
-x = np.tile(np.arange(1,5), d.shape[0]) # summer months are numbered from 1 to 4
-y = d[:,1:5].ravel()
+x = np.tile(np.arange(1,4), d.shape[0]) # summer months are numbered from 1 to 3
+y = d[:,1:4].ravel()
 N = len(x)
 data = dict(
     N = N,
-    K = 4,  # 4 groups
+    K = 3,  # 3 groups
     x = x,  # group indicators
     y = y   # observations
 )
@@ -552,9 +560,9 @@ samples = fit.extract(permuted=True)
 print "std(mu0): {}".format(np.std(samples['mu0']))
 mu = samples['mu']
 # Matrix of probabilities that one mu is larger than other
-ps = np.zeros((4,4))
-for k1 in range(4):
-    for k2 in range(k1+1,4):
+ps = np.zeros((3,3))
+for k1 in range(3):
+    for k2 in range(k1+1,3):
         ps[k1,k2] = np.mean(mu[:,k1]>mu[:,k2])
         ps[k2,k1] = 1 - ps[k1,k2]
 print "Matrix of probabilities that one mu is larger than other:"
@@ -598,12 +606,12 @@ model {
 data_path = '../utilities_and_data/kilpisjarvi-summer-temp.csv'
 d = np.loadtxt(data_path, dtype=np.double, delimiter=';', skiprows=1)
 # Is there difference between different summer months?
-x = np.tile(np.arange(1,5), d.shape[0]) # summer months are numbered from 1 to 4
-y = d[:,1:5].ravel()
+x = np.tile(np.arange(1,4), d.shape[0]) # summer months are numbered from 1 to 3
+y = d[:,1:4].ravel()
 N = len(x)
 data = dict(
     N = N,
-    K = 4,  # 4 groups
+    K = 3,  # 3 groups
     x = x,  # group indicators
     y = y   # observations
 )
@@ -615,9 +623,9 @@ samples = fit.extract(permuted=True)
 print "std(mu0): {}".format(np.std(samples['mu0']))
 mu = samples['mu']
 # Matrix of probabilities that one mu is larger than other
-ps = np.zeros((4,4))
-for k1 in range(4):
-    for k2 in range(k1+1,4):
+ps = np.zeros((3,3))
+for k1 in range(3):
+    for k2 in range(k1+1,3):
         ps[k1,k2] = np.mean(mu[:,k1]>mu[:,k2])
         ps[k2,k1] = 1 - ps[k1,k2]
 print "Matrix of probabilities that one mu is larger than other:"
