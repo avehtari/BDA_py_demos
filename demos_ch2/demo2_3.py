@@ -1,6 +1,9 @@
+# Aki Vehtari <Aki.Vehtari@aalto.fi>
+# Tuomas Sivula <Tuomas.Sivula@aalto.fi>
 """Bayesian Data Analysis, 3rd ed
 Chapter 2, demo 3
 
+Probability of a girl birth given placenta previa (BDA3 p. 37).
 Simulate samples from Beta(438,544), draw a histogram with quantiles, and do 
 the same for a transformed variable.
 

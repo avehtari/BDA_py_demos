@@ -1,6 +1,9 @@
+# Aki Vehtari <Aki.Vehtari@aalto.fi>
+# Tuomas Sivula <Tuomas.Sivula@aalto.fi>
 """Bayesian Data Analysis, 3rd ed
 Chapter 2, demo 4
 
+Probability of a girl birth given placenta previa (BDA3 p. 37).
 Calculate the posterior distribution on a discrete grid of points by 
 multiplying the likelihood and a non-conjugate prior at each point, and 
 normalizing over the points. Simulate samples from the resulting non-standard 

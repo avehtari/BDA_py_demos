@@ -1,7 +1,7 @@
 """Bayesian Data Analysis, 3rd ed
 Chapter 3, demo 5
 
-Demonstrate a normal model for the Newcomb's data (BDA3 p. 66).
+Estimating the speed of light using normal model BDA3 p. 66
 
 """
 
@@ -76,4 +76,3 @@ axes[1].set_xlabel('$\mu$')
 axes[1].set_yticks(())
 
 plt.show()
-

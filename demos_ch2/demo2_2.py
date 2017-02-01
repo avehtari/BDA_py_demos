@@ -1,6 +1,9 @@
+# Aki Vehtari <Aki.Vehtari@aalto.fi>
+# Tuomas Sivula <Tuomas.Sivula@aalto.fi>
 """Bayesian data analysis, 3rd ed
 Chapter 2, demo 2
 
+Probability of a girl birth given placenta previa (BDA3 p. 37)
 Illustrate the effect of a prior. Comparison of posterior distributions with 
 different parameter values for Beta prior distribution.
 
