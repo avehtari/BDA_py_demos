@@ -14,9 +14,9 @@ import matplotlib.pyplot as plt
 # Edit default plot settings (colours from colorbrewer2.org)
 plt.rc('font', size=14)
 plt.rc('lines', color='#377eb8', linewidth=2)
-plt.rc('axes', color_cycle=('#377eb8','#e41a1c','#4daf4a',
-                            '#984ea3','#ff7f00','#ffff33'))
-
+plt.rc('axes', prop_cycle=plt.cycler(
+        color=['#377eb8','#e41a1c','#4daf4a',
+               '#984ea3','#ff7f00','#ffff33']))
 # data
 data_path = '../utilities_and_data/light.txt'
 y = np.loadtxt(data_path)
@@ -65,12 +65,9 @@ axes[1].plot(t1, pm_mu)
 axes[1].plot(t1, pm_mu_pos)
 # Plot the currently accepted true value
 axes[1].axvline(33, color='k', linestyle='--', linewidth=1.5)
-axes[1].legend(
-    ('posterior of $\mu$',
-     'posterior of $\mu$ given $y > 0$',
-     '\'true value\''),
-     'upper left'
-)
+axes[1].legend(['posterior of $\mu$',
+    'posterior of $\mu$ given $y > 0$',
+    '\'true value\''], loc='upper left')
 axes[1].set_title('Normal model')
 axes[1].set_xlabel('$\mu$')
 axes[1].set_yticks(())
