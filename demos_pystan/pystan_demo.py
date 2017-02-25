@@ -109,7 +109,7 @@ model {
 }
 generated quantities {
   real oddsratio;
-  oddsratio <- (theta2/(1-theta2))/(theta1/(1-theta1));
+  oddsratio = (theta2/(1-theta2))/(theta1/(1-theta1));
 }
 """
 data = dict(N1=674, y1=39, N2=680, y2=22)
@@ -135,7 +135,7 @@ parameters {
 }
 transformed parameters {
     vector[N] mu;
-    mu <- alpha + beta*x;
+    mu = alpha + beta*x;
 }
 model {
     y ~ normal(mu, sigma);
@@ -143,16 +143,16 @@ model {
 generated quantities {
     real ypred;
     vector[N] log_lik;
-    ypred <- normal_rng(alpha + beta*xpred, sigma);
+    ypred = normal_rng(alpha + beta*xpred, sigma);
     for (n in 1:N)
-        log_lik[n] <- normal_log(y[n], alpha + beta*x[n], sigma);
+        log_lik[n] = normal_lpdf(y[n], alpha + beta*x[n], sigma);
 }
 """
 # Data for Stan
 data_path = '../utilities_and_data/kilpisjarvi-summer-temp.csv'
 d = np.loadtxt(data_path, dtype=np.double, delimiter=';', skiprows=1)
-x = np.repeat(d[:,0], 3)
-y = d[:,1:4].ravel()
+x = d[:,0]
+y = d[:,4]
 N = len(x)
 xpred = 2016
 data = dict(N=N, x=x, y=y, xpred=xpred)
@@ -187,7 +187,7 @@ plt.xlim((1952,2013))
 plt.subplot(3,1,2)
 plt.hist(samples['beta'], 50)
 plt.xlabel('beta')
-print 'Pr(beta > 0) = {}'.format(np.mean(samples['beta']>0))
+print('Pr(beta > 0) = {}'.format(np.mean(samples['beta']>0)))
 plt.subplot(3,1,3)
 plt.hist(samples['ypred'], 50)
 plt.xlabel('y-prediction for x={}'.format(xpred))
@@ -214,7 +214,7 @@ parameters {
 }
 transformed parameters {
     vector[N] mu;
-    mu <- alpha + beta*x;
+    mu = alpha + beta*x;
 }
 model {
     alpha ~ normal(pmualpha,psalpha);
@@ -225,15 +225,15 @@ model {
 # Data for Stan
 data_path = '../utilities_and_data/kilpisjarvi-summer-temp.csv'
 d = np.loadtxt(data_path, dtype=np.double, delimiter=';', skiprows=1)
-x = np.repeat(d[:,0], 3)
-y = d[:,1:4].ravel()
+x = d[:,0]
+y = d[:,4]
 N = len(x)
 data = dict(
     N = N,
     x = x,
     y = y,
     pmualpha = y.mean(),    # Centered
-    psalpha  = (14-4)/6.0,  # avg temp between 4-14
+    psalpha  = 100,  # weakly informative prior
     pmubeta  = 0,           # a priori increase and decrese as likely
     psbeta   = (.1--.1)/6.0 # avg temp probably does not increase more than 1
                             # degree per 10 years
@@ -264,7 +264,7 @@ plt.xlim((1952,2013))
 plt.subplot(3,1,2)
 plt.hist(samples['beta'], 50)
 plt.xlabel('beta')
-print 'Pr(beta > 0) = {}'.format(np.mean(samples['beta']>0))
+print('Pr(beta > 0) = {}'.format(np.mean(samples['beta']>0)))
 plt.subplot(3,1,3)
 plt.hist(samples['sigma'], 50)
 plt.xlabel('sigma')
@@ -283,8 +283,8 @@ data {
 transformed data {
   vector[N] x_std;
   vector[N] y_std;
-  x_std <- (x - mean(x)) / sd(x);
-  y_std <- (y - mean(y)) / sd(y);
+  x_std = (x - mean(x)) / sd(x);
+  y_std = (y - mean(y)) / sd(y);
 }
 parameters {
     real alpha; 
@@ -293,7 +293,7 @@ parameters {
 }
 transformed parameters {
     vector[N] mu_std;
-    mu_std <- alpha + beta*x_std;
+    mu_std = alpha + beta*x_std;
 }
 model {
   alpha ~ normal(0,1);
@@ -303,15 +303,15 @@ model {
 generated quantities {
     vector[N] mu;
     real<lower=0> sigma;
-    mu <- mean(y) + mu_std*sd(y);
-    sigma <- sigma_std*sd(y);
+    mu = mean(y) + mu_std*sd(y);
+    sigma = sigma_std*sd(y);
 }
 """
 # Data for Stan
 data_path = '../utilities_and_data/kilpisjarvi-summer-temp.csv'
 d = np.loadtxt(data_path, dtype=np.double, delimiter=';', skiprows=1)
-x = np.repeat(d[:,0], 3)
-y = d[:,1:4].ravel()
+x = d[:,0]
+y = d[:,4]
 N = len(x)
 data = dict(N = N, x = x, y = y)
 # Compile and fit the model
@@ -340,7 +340,7 @@ plt.xlim((1952,2013))
 plt.subplot(3,1,2)
 plt.hist(samples['beta'], 50)
 plt.xlabel('beta')
-print 'Pr(beta > 0) = {}'.format(np.mean(samples['beta']>0))
+print('Pr(beta > 0) = {}'.format(np.mean(samples['beta']>0)))
 plt.subplot(3,1,3)
 plt.hist(samples['sigma'], 50)
 plt.xlabel('sigma')
@@ -364,7 +364,7 @@ parameters {
 }
 transformed parameters {
     vector[N] mu;
-    mu <- alpha + beta*x;
+    mu = alpha + beta*x;
 }
 model {
     nu ~ gamma(2,0.1); // Juarez and Steel (2010)
@@ -374,8 +374,8 @@ model {
 # Data for Stan
 data_path = '../utilities_and_data/kilpisjarvi-summer-temp.csv'
 d = np.loadtxt(data_path, dtype=np.double, delimiter=';', skiprows=1)
-x = np.repeat(d[:,0], 3)
-y = d[:,1:4].ravel()
+x = d[:,0]
+y = d[:,4]
 N = len(x)
 data = dict(N = N, x = x, y = y)
 # Compile and fit the model
@@ -404,7 +404,7 @@ plt.xlim((1952,2013))
 plt.subplot(4,1,2)
 plt.hist(samples['beta'], 50)
 plt.xlabel('beta')
-print 'Pr(beta > 0) = {}'.format(np.mean(samples['beta']>0))
+print('Pr(beta > 0) = {}'.format(np.mean(samples['beta']>0)))
 plt.subplot(4,1,3)
 plt.hist(samples['sigma'], 50)
 plt.xlabel('sigma')
@@ -457,12 +457,11 @@ for k1 in range(3):
     for k2 in range(k1+1,3):
         ps[k1,k2] = np.mean(mu[:,k1]>mu[:,k2])
         ps[k2,k1] = 1 - ps[k1,k2]
-print "Matrix of probabilities that one mu is larger than other:"
-print ps
+print("Matrix of probabilities that one mu is larger than other:")
+print(ps)
 # Plot
 plt.boxplot(mu)
 plt.show()
-
 
 # ==== Comparison of k groups with unequal variances ===========================
 # ==============================================================================
@@ -506,8 +505,8 @@ for k1 in range(3):
     for k2 in range(k1+1,3):
         ps[k1,k2] = np.mean(mu[:,k1]>mu[:,k2])
         ps[k2,k1] = 1 - ps[k1,k2]
-print "Matrix of probabilities that one mu is larger than other:"
-print ps
+print("Matrix of probabilities that one mu is larger than other:")
+print(ps)
 # Plot
 plt.boxplot(mu)
 plt.show()
@@ -557,7 +556,7 @@ fit = pystan.stan(model_code=hier_code, data=data)
 
 # Analyse results
 samples = fit.extract(permuted=True)
-print "std(mu0): {}".format(np.std(samples['mu0']))
+print("std(mu0): {}".format(np.std(samples['mu0'])))
 mu = samples['mu']
 # Matrix of probabilities that one mu is larger than other
 ps = np.zeros((3,3))
@@ -565,8 +564,8 @@ for k1 in range(3):
     for k2 in range(k1+1,3):
         ps[k1,k2] = np.mean(mu[:,k1]>mu[:,k2])
         ps[k2,k1] = 1 - ps[k1,k2]
-print "Matrix of probabilities that one mu is larger than other:"
-print ps
+print("Matrix of probabilities that one mu is larger than other:")
+print(ps)
 # Plot
 plt.boxplot(mu)
 plt.show()
@@ -620,7 +619,7 @@ fit = pystan.stan(model_code=hier_code, data=data)
 
 # Analyse results
 samples = fit.extract(permuted=True)
-print "std(mu0): {}".format(np.std(samples['mu0']))
+print("std(mu0): {}".format(np.std(samples['mu0'])))
 mu = samples['mu']
 # Matrix of probabilities that one mu is larger than other
 ps = np.zeros((3,3))
@@ -628,8 +627,8 @@ for k1 in range(3):
     for k2 in range(k1+1,3):
         ps[k1,k2] = np.mean(mu[:,k1]>mu[:,k2])
         ps[k2,k1] = 1 - ps[k1,k2]
-print "Matrix of probabilities that one mu is larger than other:"
-print ps
+print("Matrix of probabilities that one mu is larger than other:")
+print(ps)
 # Plot
 plt.boxplot(mu)
 plt.show()
