@@ -1,7 +1,7 @@
 """Pareto smoothed importance sampling (PSIS)
 
 This module implements Pareto smoothed importance sampling (PSIS) and PSIS
-leave-one-out cross-validation for Python (Numpy).
+leave-one-out (LOO) cross-validation for Python (Numpy).
 
 Included functions
 ------------------
@@ -44,21 +44,22 @@ import numpy as np
 
 
 def psisloo(log_lik, **kwargs):
-    """PSIS leave-one-out log predictive densities.
+    r"""PSIS leave-one-out log predictive densities.
 
     Computes the log predictive densities given posterior samples of the log
-    likelihood terms p(y_i|\theta^s) in input parameter `log_lik`. Returns a
-    sum of the leave-one-out log predictive densities `loo`, individual
-    leave-one-out log predictive density terms `loos` and an estimate of Pareto
-    tail indeces `ks`. If tail index k>0.5, variance of the raw estimate does
-    not exist and if tail index k>1 the mean of the raw estimate does not exist
-    and the PSIS estimate is likely to have large variation and some bias.
+    likelihood terms :math:`p(y_i|\theta^s)` in input parameter `log_lik`.
+    Returns a sum of the leave-one-out log predictive densities `loo`,
+    individual leave-one-out log predictive density terms `loos` and an estimate
+    of Pareto tail indeces `ks`. If tail index k > 0.5, variance of the raw
+    estimate does not exist and if tail index k > 1 the mean of the raw estimate
+    does not exist and the PSIS estimate is likely to have large variation and
+    some bias.
 
     Parameters
     ----------
     log_lik : ndarray
         Array of size n x m containing n posterior samples of the log likelihood
-        terms p(y_i|\theta^s).
+        terms p(y_i|theta^s).
 
     Additional keyword arguments are passed to the psislw() function (see the
     corresponding documentation).
@@ -101,7 +102,7 @@ def psislw(lw, wcpp=20, wtrunc=3/4, overwrite_lw=False):
         Percentage of samples used for GPD fit estimate (default is 20).
 
     wtrunc : float
-        Positive parameter for truncating very large weights to n^wtrunc.
+        Positive parameter for truncating very large weights to ``n**wtrunc``.
         Providing False or 0 disables truncation. Default values is 3/4.
 
     overwrite_lw : bool, optional
@@ -335,8 +336,8 @@ def gpinv(p, k, sigma):
 def sumlogs(x, axis=None, out=None):
     """Sum of vector where numbers are represented by their logarithms.
 
-    Calculates np.log(np.sum(np.exp(x), axis=axis)) in such a fashion that it
-    works even when elements have large magnitude.
+    Calculates ``np.log(np.sum(np.exp(x), axis=axis))`` in such a fashion that
+    it works even when elements have large magnitude.
 
     """
     maxx = x.max(axis=axis, keepdims=True)
