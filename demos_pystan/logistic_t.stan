@@ -15,8 +15,17 @@ parameters {
   real alpha;
   vector[D] beta;
 }
+transformed parameters {
+  vector[N] eta;
+  eta = alpha + X * beta;
+}
 model {
   alpha ~ student_t(p_alpha_df, p_alpha_loc, p_alpha_scale);
   beta ~ student_t(p_beta_df, p_beta_loc, p_beta_scale);
-  y ~ bernoulli_logit(alpha + X * beta);
+  y ~ bernoulli_logit(eta);
+}
+generated quantities {
+  vector[N] log_lik;
+  for (i in 1:N)
+    log_lik[i] = bernoulli_logit_lpmf(y[i] | eta[i]);
 }
