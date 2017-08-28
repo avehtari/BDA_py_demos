@@ -1,1 +1,4 @@
 *.pyc
+*.ipynb_checkpoints*
+*cached-model-*.pkl
+*~
