@@ -2,7 +2,9 @@
 
 # Author: Tuomas Sivula
 
+import numpy as np
 import matplotlib as mpl
+import matplotlib.pyplot as plt
 
 
 def mix_colors(color1, color2, proportion=0.5):
@@ -89,3 +91,104 @@ def darken(color, proportion=0.5):
 
     """
     return mix_colors((0.0, 0.0, 0.0), color, proportion=proportion)
+
+
+def hist_multi_sharex(
+        samples, rowlabels=None, n_bins=20, sharey=None, color=None,
+        x_lines=None, x_line_colors=None, **kwargs):
+    """Plot multiple histograms sharing the x-axis.
+
+    Additional keyword arguments are passed for the subplot figure creation in
+    :meth:`matplotlib.pyplot.subplots`.
+
+    Parameters
+    ----------
+    samples : sequence of ndarray
+        the samples to be plotted
+
+    rowlabels : sequence of str, optional
+        Names for the rows, by defalut no name labels are used.
+
+    n_bins : int, optional
+        number of bins in the whole plot range
+
+    sharey : bool, optional
+        If True, the y axis (count) of each histogram is explicitly shared.
+        By default, if the sample size is constant, the y-axis is shared,
+        otherwise not.
+
+    color : matplotlib color specification, optional
+        color for the histograms
+
+    x_lines : sequence of scalar or scalar, optional
+        Sequence of locations in x-axis in which a line spanning through all
+        the histograms is plotted.
+
+    x_line_colors : sequence of colors or color, optional
+        Respective line colors for each `x_line`. Defalut color is ``'C1'``.
+
+    Returns
+    -------
+    fig, axes
+        the figure object and the array of axes
+
+    """
+
+    # get range of all samples
+    x_range = [
+        min(np.min(sample) for sample in samples),
+        max(np.max(sample) for sample in samples),
+    ]
+
+    # use same explicit bin edges for all the plots
+    bins = np.linspace(x_range[0], x_range[1], n_bins+1)
+
+    if sharey is None:
+        # check if sample size is constant
+        sharey = all(len(samples[0]) == len(sample) for sample in samples[1:])
+
+    if color is None:
+        color = lighten('C0', 0.25)
+
+    # set up multiple plots
+    fig, axes = plt.subplots(
+        nrows=len(samples),
+        ncols=1,
+        sharex=True,
+        sharey=sharey,
+        **kwargs
+    )
+
+    # plot histograms
+    for i, (ax, sample)  in enumerate(zip(axes, samples)):
+        ax.hist(sample, bins=bins, color=color)
+        if rowlabels is not None:
+            ax.set_ylabel(rowlabels[i], rotation='horizontal', ha='right')
+        ax.spines['top'].set_visible(False)
+        ax.spines['left'].set_visible(False)
+        ax.spines['right'].set_visible(False)
+        ax.set_yticks(())
+
+    # draw lines accross all the figures
+    if x_lines is not None:
+        # ensure sequences provided
+        if np.isscalar(x_lines):
+            x_lines = (x_lines,)
+            if x_line_colors is not None:
+                x_line_colors = (x_line_colors,)
+        for i, x_location in enumerate(x_lines):
+            if x_location < x_range[0] or x_range[1] < x_location:
+                # x location out of range
+                continue
+            spanning_line = mpl.patches.ConnectionPatch(
+                xyA=(x_location, 0),
+                xyB=(x_location, axes[0].get_ylim()[1]),
+                coordsA="data",
+                coordsB="data",
+                axesA=axes[-1],
+                axesB=axes[0],
+                color=x_line_colors[i] if x_line_colors is not None else 'C1'
+            )
+            axes[-1].add_artist(spanning_line)
+
+    return fig, axes
