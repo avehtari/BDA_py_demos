@@ -7,6 +7,24 @@ import matplotlib as mpl
 import matplotlib.pyplot as plt
 
 
+# custom styles for matplotlib usable with plt.style.use()
+custom_styles = dict(
+    gray_background = {
+        'axes.axisbelow': True,
+        'axes.edgecolor': 'white',
+        'axes.facecolor': '#ececec',
+        'axes.grid': True,
+        'axes.linewidth': 0.0,
+        'grid.color': 'white',
+        'xtick.top': False,
+        'xtick.bottom': False,
+        'ytick.left': False,
+        'ytick.right': False,
+        'legend.facecolor': 'white'
+    }
+)
+
+
 def mix_colors(color1, color2, proportion=0.5):
     """Mix two colors with given ratio.
 
