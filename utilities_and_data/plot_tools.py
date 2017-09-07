@@ -7,6 +7,49 @@ import matplotlib as mpl
 import matplotlib.pyplot as plt
 
 
+class modify_axes:
+    """Utility methods for modifying plot axes."""
+
+    @staticmethod
+    def only_x(axes=None, position='zero'):
+        """Remove all spines except the x-axis.
+
+        Parameters
+        ----------
+        axes : matplotlib.axes or array of such, optional
+            The axes to operate on. If not provided, the currently active axes
+            is operated.
+
+        position : {'zero', 'center', 2-tuple}, optional
+            The position of the only remaining spine. See options in
+            :meth:`matplotlib.spines.Spine.set_position()`.
+            Default is to set the axis to zero.
+
+        """
+        if axes is None:
+            # get the active axes
+            axes = plt.gca()
+        # iterate over all the axes
+        for ax in np.asanyarray(axes).flat:
+            # remove other spines
+            ax.spines['top'].set_visible(False)
+            ax.spines['right'].set_visible(False)
+            ax.spines['left'].set_visible(False)
+            # remove y-ticks completely
+            ax.set_yticks(())
+            # ensure x-ticks are at the bottom
+            ax.xaxis.tick_bottom()
+            # store the x-axis tick labels
+            old_labels = ax.xaxis.get_ticklabels()
+            # move x-axis to the desired position
+            ax.spines['bottom'].set_position(position)
+            # ensure original tick label visibility
+            for new_label, old_label in zip(
+                    ax.xaxis.get_ticklabels(), old_labels):
+                new_label.set_visible(old_label.get_visible())
+
+
+
 # custom styles for matplotlib usable with plt.style.use()
 custom_styles = dict(
     gray_background = {
