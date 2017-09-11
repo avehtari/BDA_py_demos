@@ -55,7 +55,7 @@ custom_styles = dict(
     gray_background = {
         'axes.axisbelow': True,
         'axes.edgecolor': 'white',
-        'axes.facecolor': '#ececec',
+        'axes.facecolor': '#f0f0f0',
         'axes.grid': True,
         'axes.linewidth': 0.0,
         'grid.color': 'white',
