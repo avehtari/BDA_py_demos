@@ -1,3 +1,4 @@
+from __future__ import division # For Python 2 compatibility
 """Pareto smoothed importance sampling (PSIS)
 
 This module implements Pareto smoothed importance sampling (PSIS) and PSIS
@@ -61,7 +62,6 @@ ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
 SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE. """
 
 
-from __future__ import division # For Python 2 compatibility
 import numpy as np
 
 
