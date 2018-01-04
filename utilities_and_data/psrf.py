@@ -1,3 +1,4 @@
+from __future__ import division
 
 # Copyright (C) 1999 Simo Sarkka
 # Copyright (C) 2003-2004,2013 Aki Vehtari
@@ -7,7 +8,6 @@
 # or later); please refer to the file LICENSE.txt, included with the software, 
 # for details.
 
-from __future__ import division
 import numpy as np
 
 def psrf(X, return_extra=False):

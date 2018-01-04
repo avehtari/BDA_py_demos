@@ -1,3 +1,4 @@
+from __future__ import division
 """Module containing functions for scaled inverse chi-squared distribution."""
 
 # Copyright (C) 2003 Aki Vehtari
@@ -7,7 +8,6 @@
 # or later); please refer to the file LICENSE.txt, included with the software, 
 # for details.
 
-from __future__ import division
 import numpy as np
 from scipy.special import gammaln
 
