@@ -1,3 +1,7 @@
+# Copyright: Michael Betancourt <https://betanalpha.github.io/writing/>
+# License: BSD (3 clause)
+# See also http://mc-stan.org/users/documentation/case-studies/pystan_workflow.html
+
 import pystan
 import pickle
 import numpy
