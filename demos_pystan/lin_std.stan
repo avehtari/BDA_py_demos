@@ -8,8 +8,10 @@ data {
 transformed data {
   vector[N] x_std;
   vector[N] y_std;
+  real xpred_std;
   x_std = (x - mean(x)) / sd(x);
   y_std = (y - mean(y)) / sd(y);
+  xpred_std = (xpred - mean(x)) / sd(x);
 }
 parameters {
   real alpha;
@@ -32,7 +34,7 @@ generated quantities {
   vector[N] log_lik;
   mu = mu_std*sd(y) + mean(y);
   sigma = sigma_std*sd(y);
-  ypred = normal_rng((alpha + beta*xpred)*sd(y)+mean(y), sigma*sd(y));
+  ypred = normal_rng((alpha + beta*xpred_std)*sd(y)+mean(y), sigma*sd(y));
   for (i in 1:N)
     log_lik[i] = normal_lpdf(y[i] | mu[i], sigma);
 }
