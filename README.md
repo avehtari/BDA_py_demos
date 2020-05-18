@@ -1,6 +1,6 @@
 # Bayesian Data Analysis Python Demos
 
-[![Binder](http://mybinder.org/badge.svg)](http://mybinder.org/repo/avehtari/bda_py_demos) to interactively run the IPython Notebooks in the browser. 
+[![Binder](http://mybinder.org/badge.svg)](http://mybinder.org/repo/avehtari/bda_py_demos) to interactively run the IPython Notebooks in the browser.
 
 This repository contains some Python demos for the book [Bayesian Data
 Analysis, 3rd ed by Gelman, Carlin, Stern, Dunson, Vehtari, and Rubin (BDA3)](http://www.stat.columbia.edu/~gelman/book/). See also [Bayesian Data Analysis course material](https://github.com/avehtari/BDA_course_Aalto).
@@ -22,3 +22,4 @@ Corresponding demos were originally written for [Matlab/Octave](https://github.c
 - matplotlib 2
 - pandas (for some demos)
 - pystan (for some demos)
+- ArviZ (for some demos)
