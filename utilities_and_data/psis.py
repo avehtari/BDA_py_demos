@@ -13,7 +13,7 @@ psislw
     Pareto smoothed importance sampling.
 
 gpdfitnew
-    Estimate the paramaters for the Generalized Pareto Distribution (GPD).
+    Estimate the parameters for the Generalized Pareto Distribution (GPD).
 
 gpinv
     Inverse Generalised Pareto distribution function.
@@ -72,7 +72,7 @@ def psisloo(log_lik, **kwargs):
     likelihood terms :math:`p(y_i|\theta^s)` in input parameter `log_lik`.
     Returns a sum of the leave-one-out log predictive densities `loo`,
     individual leave-one-out log predictive density terms `loos` and an estimate
-    of Pareto tail indeces `ks`. If tail index k > 0.5, variance of the raw
+    of Pareto tail indices `ks`. If tail index k > 0.5, variance of the raw
     estimate does not exist and if tail index k > 1 the mean of the raw estimate
     does not exist and the PSIS estimate is likely to have large variation and
     some bias.
@@ -95,7 +95,7 @@ def psisloo(log_lik, **kwargs):
         individual leave-one-out log predictive density terms
 
     ks : ndarray
-        estimated Pareto tail indeces
+        estimated Pareto tail indices
 
     """
     # ensure overwrite flag in passed arguments
@@ -211,7 +211,7 @@ def psislw(lw, wcpp=20, wtrunc=3/4, overwrite_lw=False):
 
 
 def gpdfitnew(x, sort=True, sort_in_place=False):
-    """Estimate the paramaters for the Generalized Pareto Distribution (GPD)
+    """Estimate the parameters for the Generalized Pareto Distribution (GPD)
 
     Returns empirical Bayes estimate for the parameters of the two-parameter
     generalized Parato distribution given the data.
