@@ -168,7 +168,7 @@ def hist_multi_sharex(
         the samples to be plotted
 
     rowlabels : sequence of str, optional
-        Names for the rows, by defalut no name labels are used.
+        Names for the rows, by default no name labels are used.
 
     n_bins : int, optional
         number of bins in the whole plot range
@@ -186,7 +186,7 @@ def hist_multi_sharex(
         the histograms is plotted.
 
     x_line_colors : sequence of colors or color, optional
-        Respective line colors for each `x_line`. Defalut color is ``'C1'``.
+        Respective line colors for each `x_line`. Default color is ``'C1'``.
 
     Returns
     -------
@@ -230,7 +230,7 @@ def hist_multi_sharex(
         ax.spines['right'].set_visible(False)
         ax.set_yticks(())
 
-    # draw lines accross all the figures
+    # draw lines across all the figures
     if x_lines is not None:
         # ensure sequences provided
         if np.isscalar(x_lines):

@@ -23,7 +23,7 @@ def psrf(X, return_extra=False):
        convergence of iterative simulations. Journal of Computational and 
        Graphical Statistics. 7, 434-455. 
     Current version:
-       Split chains, return square-root definiton of R, and compute n_eff using 
+       Split chains, return square-root definition of R, and compute n_eff using 
        variogram estimate and Geyer's initial positive sequence as described in 
        Gelman et al (2013), Bayesian Data Analsyis, 3rd ed, sections 11.4-11.5.
     
