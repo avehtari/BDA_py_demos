@@ -10,7 +10,7 @@ data {
     int<lower=0> n;                     // number of data points
     int<lower=1> d;                     // explanatory variable dimension
     matrix[n, d] X;                     // explanatory variable
-    int<lower=0,upper=1> y[n];          // response variable
+    array[n] int<lower=0,upper=1> y;          // response variable
     int<lower=1> p_alpha_df;            // prior alpha degrees of freedom
     real p_alpha_loc;                   // prior alpha location
     real<lower=0> p_alpha_scale;        // prior scale alpha

@@ -3,7 +3,7 @@
 data {
   int<lower=0> N; // number of data points
   int<lower=0> K; // number of groups
-  int<lower=1,upper=K> x[N]; // group indicator
+  array[N] int<lower=1,upper=K> x; // group indicator
   vector[N] y; //
 }
 parameters {
