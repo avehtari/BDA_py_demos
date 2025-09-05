@@ -7,11 +7,11 @@ jobs:
     name: Testing
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v2
-      - uses: actions/setup-python@v2
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v4
         with:
-          python-version: '3.6'
-      - uses: actions/cache@v2
+          python-version: '3.12'
+      - uses: actions/checkout@v4
         with:
           path: ~/.cache/pip
           key: ${{ runner.os }}-${{ env.pythonLocation }}-pip-${{ hashFiles('**/requirements.txt') }}
