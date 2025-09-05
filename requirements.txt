@@ -4,6 +4,5 @@ numpy
 jupyter
 ipython
 pandas
-pystan
+cmdstanpy
 scipy
-seaborn
