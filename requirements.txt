@@ -1,8 +1,0 @@
-arviz
-matplotlib
-numpy
-jupyter
-ipython
-pandas
-cmdstanpy
-scipy

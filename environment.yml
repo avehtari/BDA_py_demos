@@ -1,0 +1,15 @@
+name: bda_py_demos
+channels:
+  - conda-forge
+  - defaults
+dependencies:
+  - python=3.12
+  - cmdstan
+  - cmdstanpy
+  - arviz
+  - matplotlib
+  - numpy
+  - jupyter
+  - ipython
+  - pandas
+  - scipy
