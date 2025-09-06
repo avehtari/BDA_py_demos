@@ -12,5 +12,7 @@ dependencies:
   - jupyter
   - ipython
   - pandas
-  - preliz
   - scipy
+  - pip
+  - pip:
+      - preliz>=0.21.0
