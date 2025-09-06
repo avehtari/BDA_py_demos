@@ -22,3 +22,16 @@ Corresponding demos were originally written for [Matlab/Octave](https://github.c
 - pandas (for some demos)
 - cmdstanpy (for some demos)
 - ArviZ (for some demos)
+
+
+You can install all necessary packages with `environment.yml` file using [conda](https://docs.conda.io/en/latest/) or [mamba](https://mamba.readthedocs.io/en/latest/):
+
+```bash
+conda env create -f environment.yml
+``` 
+
+or 
+
+```bash
+mamba env create -f environment.yml
+``` 
