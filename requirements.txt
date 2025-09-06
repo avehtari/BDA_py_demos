@@ -1,9 +1,0 @@
-arviz
-matplotlib
-numpy
-jupyter
-ipython
-pandas
-pystan
-scipy
-seaborn
